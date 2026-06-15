@@ -282,6 +282,51 @@
   .barchart .col{display:flex;flex-direction:column;align-items:center;gap:6px;justify-content:flex-end;}
   .barchart .bar{width:28px;background:var(--fblue);border-radius:6px 6px 0 0;}
   .barchart .lb{font-size:11px;color:var(--gray);}
+
+  /* ===== 追加部品（その4・専門寄り） ===== */
+  /* 予定入りカレンダー */
+  .cal2{width:100%;max-width:520px;border:1px solid var(--line);border-radius:10px;background:var(--card);padding:12px;}
+  .cal2 .ch{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:8px;color:var(--text);}
+  .cal2 .ch button{border:none;background:none;color:var(--gray);cursor:pointer;font-size:14px;}
+  .cal2 .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+  .cal2 .grid .w{color:var(--gray);font-size:10.5px;text-align:center;padding:2px 0;}
+  .cal2 .grid .d{min-height:52px;border:1px solid var(--line);border-radius:6px;padding:3px 4px;font-size:11px;color:var(--text);}
+  .cal2 .grid .d.mut{color:var(--line);background:var(--bg);}
+  .cal2 .grid .d.today{border-color:var(--fblue);box-shadow:0 0 0 1px var(--fblue) inset;}
+  .cal2 .ev{display:block;font-size:9px;border-radius:4px;padding:1px 3px;margin-top:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+  .cal2 .ev.b{background:var(--activebg);color:var(--fblue-dark);}
+  .cal2 .ev.t{background:var(--tealbg);color:var(--teal);}
+  .cal2 .ev.g{background:var(--greenbg);color:var(--green);}
+  /* 高機能な表 */
+  .tbl2-filter{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center;}
+  table.tbl2{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  table.tbl2 th,table.tbl2 td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);}
+  table.tbl2 thead th{background:var(--bg);color:var(--gray);font-weight:700;font-size:12px;cursor:pointer;user-select:none;white-space:nowrap;}
+  table.tbl2 thead th.nosort{cursor:default;}
+  table.tbl2 thead th .ar{color:var(--line);font-size:10px;margin-left:4px;}
+  table.tbl2 thead th.asc .ar,table.tbl2 thead th.desc .ar{color:var(--fblue);}
+  table.tbl2 tbody tr:last-child td{border-bottom:none;}
+  table.tbl2 tbody tr.sel{background:var(--topbar);}
+  table.tbl2 input[type=checkbox]{accent-color:var(--fblue);}
+  /* グラフ（SVG）の枠 */
+  .chartbox{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--gray);}
+  .legend .lg{display:inline-flex;align-items:center;gap:6px;}
+  .legend .sw{width:10px;height:10px;border-radius:3px;}
+  /* 複数選択 */
+  .multi{position:relative;width:300px;}
+  .multi .box{display:flex;flex-wrap:wrap;gap:5px;align-items:center;border:1px solid var(--line);border-radius:8px;background:var(--card);padding:6px 8px;min-height:38px;cursor:pointer;}
+  .multi .box .ph{color:var(--gray);font-size:13px;}
+  .multi .opts{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,.14);padding:6px;display:none;z-index:5;}
+  .multi.open .opts{display:block;}
+  .multi .opt{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:6px;font-size:13px;cursor:pointer;color:var(--text);}
+  .multi .opt:hover{background:var(--topbar);}
+  .multi .opt.on{color:var(--fblue);font-weight:600;}
+  .multi .opt .ck{margin-left:auto;color:var(--fblue);visibility:hidden;}
+  .multi .opt.on .ck{visibility:visible;}
+  /* 日付範囲 */
+  .daterange{display:inline-flex;align-items:center;gap:8px;}
+  .daterange input{font:inherit;font-size:13px;color:var(--text);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:7px 9px;}
 </style>
 </head>
 <body>
@@ -700,6 +745,113 @@ panel.style.position='fixed'; panel.style.display='block';</pre>
     </div>
   </section>
 
+  <!-- 予定入りカレンダー -->
+  <section><h2><span class="num">㊴</span>予定入りカレンダー（シフト表向き）</h2>
+    <div class="demo col">
+      <div class="cal2">
+        <div class="ch"><button>‹</button><span>2026年6月</span><button>›</button></div>
+        <div class="grid">
+          <div class="w">日</div><div class="w">月</div><div class="w">火</div><div class="w">水</div><div class="w">木</div><div class="w">金</div><div class="w">土</div>
+          <div class="d mut">31</div>
+          <div class="d">1<span class="ev b">A現場 2名</span></div>
+          <div class="d">2<span class="ev t">B現場 1名</span></div>
+          <div class="d">3</div>
+          <div class="d">4<span class="ev g">教育</span></div>
+          <div class="d">5<span class="ev b">A現場 3名</span></div>
+          <div class="d">6</div>
+          <div class="d">7</div>
+          <div class="d">8<span class="ev b">A現場 2名</span><span class="ev t">B現場 1名</span></div>
+          <div class="d">9</div>
+          <div class="d">10</div>
+          <div class="d">11</div>
+          <div class="d">12<span class="ev g">面談</span></div>
+          <div class="d">13</div>
+          <div class="d">14</div>
+          <div class="d today">15<span class="ev b">A現場 2名</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 高機能な表 -->
+  <section><h2><span class="num">㊵</span>高機能な表（並べ替え・絞り込み・選択）</h2>
+    <p class="hint">見出しクリックで並べ替え、検索で絞り込み、チェックで選択。</p>
+    <div class="demo col">
+      <div data-table style="width:100%">
+        <div class="tbl2-filter">
+          <div class="search" style="min-width:200px"><span class="ic">🔍</span><input data-tfilter placeholder="氏名・企業で絞り込み"></div>
+          <span class="badge gray" data-tcount></span>
+        </div>
+        <table class="tbl2">
+          <thead><tr>
+            <th class="nosort" style="width:36px"><input type="checkbox" data-tall></th>
+            <th data-sort>氏名<span class="ar">↕</span></th>
+            <th data-sort>制度<span class="ar">↕</span></th>
+            <th data-sort data-num>期限<span class="ar">↕</span></th>
+          </tr></thead>
+          <tbody>
+            <tr><td><input type="checkbox"></td><td>田中 一郎</td><td>特定技能</td><td>2027-03-31</td></tr>
+            <tr><td><input type="checkbox"></td><td>佐藤 花子</td><td>技能実習</td><td>2026-09-30</td></tr>
+            <tr><td><input type="checkbox"></td><td>鈴木 次郎</td><td>特定技能</td><td>2026-12-15</td></tr>
+            <tr><td><input type="checkbox"></td><td>山田 三郎</td><td>技能実習</td><td>2027-06-30</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 折れ線グラフ -->
+  <section><h2><span class="num">㊶</span>折れ線グラフ（インラインSVG・外部送信なし）</h2>
+    <div class="demo col">
+      <div class="chartbox" style="width:340px">
+        <svg viewBox="0 0 320 140" width="100%" height="140" aria-label="折れ線グラフ">
+          <line x1="20" y1="120" x2="305" y2="120" stroke="#e1dcdc" stroke-width="1"/>
+          <line x1="20" y1="10" x2="20" y2="120" stroke="#e1dcdc" stroke-width="1"/>
+          <polyline points="20,90 90,70 160,80 230,45 300,28" fill="none" stroke="#285ac8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="20" cy="90" r="3.5" fill="#285ac8"/><circle cx="90" cy="70" r="3.5" fill="#285ac8"/><circle cx="160" cy="80" r="3.5" fill="#285ac8"/><circle cx="230" cy="45" r="3.5" fill="#285ac8"/><circle cx="300" cy="28" r="3.5" fill="#285ac8"/>
+        </svg>
+        <div class="legend"><span class="lg"><span class="sw" style="background:#285ac8"></span>受入人数（直近5か月）</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 円グラフ -->
+  <section><h2><span class="num">㊷</span>円グラフ（ドーナツ・インラインSVG）</h2>
+    <div class="demo">
+      <div class="chartbox">
+        <svg viewBox="0 0 120 120" width="120" height="120" aria-label="円グラフ">
+          <circle cx="60" cy="60" r="40" fill="none" stroke="#285ac8" stroke-width="18" stroke-dasharray="100.5 150.8" stroke-dashoffset="0" transform="rotate(-90 60 60)"/>
+          <circle cx="60" cy="60" r="40" fill="none" stroke="#00b9b9" stroke-width="18" stroke-dasharray="75.4 175.9" stroke-dashoffset="-100.5" transform="rotate(-90 60 60)"/>
+          <circle cx="60" cy="60" r="40" fill="none" stroke="#00963c" stroke-width="18" stroke-dasharray="50.3 201" stroke-dashoffset="-175.9" transform="rotate(-90 60 60)"/>
+          <circle cx="60" cy="60" r="40" fill="none" stroke="#be8c14" stroke-width="18" stroke-dasharray="25.1 226.2" stroke-dashoffset="-226.2" transform="rotate(-90 60 60)"/>
+        </svg>
+        <div class="legend"><span class="lg"><span class="sw" style="background:#285ac8"></span>製造 40%</span><span class="lg"><span class="sw" style="background:#00b9b9"></span>介護 30%</span><span class="lg"><span class="sw" style="background:#00963c"></span>建設 20%</span><span class="lg"><span class="sw" style="background:#be8c14"></span>農業 10%</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 複数選択 -->
+  <section><h2><span class="num">㊸</span>複数選択（マルチセレクト）</h2>
+    <div class="demo col">
+      <div class="multi" data-multi>
+        <div class="box"><span class="ph">職種を選択…</span></div>
+        <div class="opts">
+          <div class="opt" data-val="製造">製造<span class="ck">✓</span></div>
+          <div class="opt" data-val="介護">介護<span class="ck">✓</span></div>
+          <div class="opt" data-val="建設">建設<span class="ck">✓</span></div>
+          <div class="opt" data-val="農業">農業<span class="ck">✓</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 日付範囲 -->
+  <section><h2><span class="num">㊹</span>日付範囲（期間）</h2>
+    <div class="demo">
+      <div class="daterange"><input type="date" value="2026-06-01"><span>〜</span><input type="date" value="2026-06-30"></div>
+    </div>
+  </section>
+
   <p class="note">この見本帳は公開リポ <code>design-system</code> 内。色を増やす・新しい共通部品を作るときは、自分で決めず社長に相談してください（共通部品の判断は社長）。</p>
 
 </div>
@@ -850,6 +1002,52 @@ panel.style.position='fixed'; panel.style.display='block';</pre>
   /* 処理中ボタン：押すと一時的にローディング表示 */
   document.querySelectorAll('[data-loading]').forEach(function(b){
     b.addEventListener('click',function(){ b.classList.add('loading'); setTimeout(function(){b.classList.remove('loading');},1500); });
+  });
+
+  /* 高機能な表：並べ替え・絞り込み・選択 */
+  document.querySelectorAll('[data-table]').forEach(function(wrap){
+    var table=wrap.querySelector('table'), tbody=table.querySelector('tbody');
+    var filter=wrap.querySelector('[data-tfilter]'), countEl=wrap.querySelector('[data-tcount]'), allCk=wrap.querySelector('[data-tall]');
+    function rows(){return Array.prototype.slice.call(tbody.querySelectorAll('tr'));}
+    function updateCount(){ if(countEl){var v=rows().filter(function(r){return r.style.display!=='none';}).length; countEl.textContent=v+'件';} }
+    if(filter) filter.addEventListener('input',function(){
+      var q=filter.value.trim();
+      rows().forEach(function(r){ r.style.display = (q===''||r.textContent.indexOf(q)>-1)?'':'none'; });
+      updateCount();
+    });
+    var ths=table.querySelectorAll('thead th[data-sort]');
+    ths.forEach(function(th){
+      th.addEventListener('click',function(){
+        var asc=!th.classList.contains('asc');
+        ths.forEach(function(t){t.classList.remove('asc','desc');});
+        th.classList.add(asc?'asc':'desc');
+        var col=Array.prototype.indexOf.call(th.parentNode.children, th);
+        rows().sort(function(a,b){
+          var x=a.children[col].textContent.trim(), y=b.children[col].textContent.trim();
+          var r=x.localeCompare(y,'ja',{numeric:true});
+          return asc?r:-r;
+        }).forEach(function(r){tbody.appendChild(r);});
+      });
+    });
+    if(allCk) allCk.addEventListener('change',function(){
+      rows().forEach(function(r){ if(r.style.display==='none')return; var c=r.querySelector('input[type=checkbox]'); if(c){c.checked=allCk.checked;r.classList.toggle('sel',allCk.checked);} });
+    });
+    tbody.addEventListener('change',function(e){ if(e.target.type==='checkbox'){ e.target.closest('tr').classList.toggle('sel',e.target.checked);} });
+    updateCount();
+  });
+
+  /* 複数選択（マルチセレクト） */
+  document.querySelectorAll('[data-multi]').forEach(function(m){
+    var box=m.querySelector('.box'), sel=[];
+    box.addEventListener('click',function(e){ if(e.target.hasAttribute('data-rm'))return; m.classList.toggle('open'); });
+    function render(){
+      box.innerHTML = sel.length ? sel.map(function(v){return '<span class="tag">'+v+' <button data-rm="'+v+'" aria-label="削除">×</button></span>';}).join('') : '<span class="ph">職種を選択…</span>';
+      box.querySelectorAll('[data-rm]').forEach(function(b){ b.addEventListener('click',function(e){ e.stopPropagation(); var v=b.getAttribute('data-rm'); sel.splice(sel.indexOf(v),1); var o=m.querySelector('.opt[data-val="'+v+'"]'); if(o)o.classList.remove('on'); render(); }); });
+    }
+    m.querySelectorAll('.opt').forEach(function(o){
+      o.addEventListener('click',function(){ var v=o.getAttribute('data-val'); var i=sel.indexOf(v); if(i>-1){sel.splice(i,1);o.classList.remove('on');}else{sel.push(v);o.classList.add('on');} render(); });
+    });
+    document.addEventListener('click',function(e){ if(!m.contains(e.target)) m.classList.remove('open'); });
   });
 </script>
 </body>
