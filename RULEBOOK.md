@@ -2,6 +2,12 @@
 
 このルールは**全プロダクト共通**。同じ社員が複数プロダクト（交通誘導警備＝Esecurity／人材事業＝Esupport 等）を使うため、見た目だけでなく**操作・言葉・入力の作法まで統一**する。**変更できるのは社長のみ。** 各製品は「使うだけ」。
 
+> **このファイルが"唯一の正（source of truth）"。** 各製品の人・AIは、UI/デザインの作業前に**必ずこの最新版を読む**こと。ローカルの記載と食い違ったら、**この公開版が優先**。
+> ・ライブ参照（常に最新）：`https://raw.githubusercontent.com/yawata-dotcom/design-system/main/RULEBOOK.md`
+> ・見本帳（標準部品）：`https://yawata-dotcom.github.io/design-system/gallery.html`
+> ・色トークン：`https://raw.githubusercontent.com/yawata-dotcom/design-system/main/tokens.css`
+> 社長がこのファイルを1か所更新すれば、全製品に効く（各製品へ個別配布は不要）。
+
 ## 1. 色（公式カラートークン）
 - 色は `tokens.css` の**17トークンだけ**を使う。**直書きの色（独自hex）は禁止**。
 - CSSは `var(--token)`、SVGの `fill`/`stroke` はトークンの実hex。
