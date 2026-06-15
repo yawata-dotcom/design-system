@@ -240,6 +240,48 @@
   /* 区切り・見出し */
   .divider{height:1px;background:var(--line);width:100%;}
   .sechd{font-size:11px;font-weight:700;color:var(--gray);}
+
+  /* ===== 追加部品（その3） ===== */
+  /* ミニカレンダー */
+  .cal{width:248px;border:1px solid var(--line);border-radius:10px;background:var(--card);padding:10px;}
+  .cal .ch{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:8px;color:var(--text);}
+  .cal .ch button{border:none;background:none;color:var(--gray);cursor:pointer;font-size:14px;}
+  .cal .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:12px;}
+  .cal .grid .w{color:var(--gray);font-size:10.5px;padding:2px 0;}
+  .cal .grid .d{padding:6px 0;border-radius:6px;cursor:pointer;color:var(--text);}
+  .cal .grid .d:hover{background:var(--topbar);}
+  .cal .grid .d.on{background:var(--fblue);color:var(--card);font-weight:700;}
+  .cal .grid .d.mut{color:var(--line);}
+  /* 詳細パネル（項目リスト） */
+  .kv{width:100%;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card);}
+  .kv .r{display:flex;justify-content:space-between;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:13px;}
+  .kv .r:last-child{border-bottom:none;}
+  .kv .r .k{color:var(--gray);} .kv .r .v{font-weight:600;color:var(--text);text-align:right;}
+  /* アイコンボタン／操作メニュー */
+  .iconbtn{width:32px;height:32px;border:1px solid var(--line);background:var(--card);border-radius:8px;color:var(--gray);cursor:pointer;font-size:15px;}
+  .iconbtn:hover{background:var(--topbar);color:var(--fblue);}
+  /* 数量ステッパー */
+  .qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+  .qty button{width:32px;height:32px;border:none;background:var(--card);color:var(--fblue);font-size:16px;cursor:pointer;}
+  .qty button:hover{background:var(--topbar);}
+  .qty .n{min-width:40px;text-align:center;font-size:13px;font-weight:700;color:var(--text);border-left:1px solid var(--line);border-right:1px solid var(--line);height:32px;display:flex;align-items:center;justify-content:center;}
+  /* スライダー */
+  input[type=range]{accent-color:var(--fblue);width:200px;}
+  /* 設定行 */
+  .setrow{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);width:100%;}
+  .setrow:last-child{border-bottom:none;}
+  .setrow .info{flex:1;} .setrow .info b{font-size:13px;color:var(--text);} .setrow .info span{display:block;font-size:11.5px;color:var(--gray);}
+  /* 注釈ボックス */
+  .callout{display:flex;gap:10px;background:var(--topbar);border:1px solid var(--activebg);border-radius:10px;padding:12px 14px;font-size:12.5px;color:var(--text);width:100%;}
+  .callout .ic{color:var(--fblue);flex:none;}
+  /* 処理中ボタン */
+  .btn.loading{position:relative;color:transparent;pointer-events:none;}
+  .btn.loading::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;border:2px solid rgba(255,255,255,.5);border-top-color:var(--card);animation:spin .7s linear infinite;}
+  /* 簡易棒グラフ（インラインSVG不要のCSSバー・単色） */
+  .barchart{display:flex;align-items:flex-end;gap:12px;height:130px;padding:8px 0;}
+  .barchart .col{display:flex;flex-direction:column;align-items:center;gap:6px;justify-content:flex-end;}
+  .barchart .bar{width:28px;background:var(--fblue);border-radius:6px 6px 0 0;}
+  .barchart .lb{font-size:11px;color:var(--gray);}
 </style>
 </head>
 <body>
@@ -571,6 +613,93 @@ panel.style.position='fixed'; panel.style.display='block';</pre>
     </div>
   </section>
 
+  <!-- ミニカレンダー -->
+  <section><h2><span class="num">㉙</span>ミニカレンダー（日付選択）</h2>
+    <div class="demo col">
+      <div class="cal">
+        <div class="ch"><button>‹</button><span>2026年6月</span><button>›</button></div>
+        <div class="grid">
+          <span class="w">日</span><span class="w">月</span><span class="w">火</span><span class="w">水</span><span class="w">木</span><span class="w">金</span><span class="w">土</span>
+          <span class="d mut">31</span><span class="d">1</span><span class="d">2</span><span class="d">3</span><span class="d">4</span><span class="d">5</span><span class="d">6</span>
+          <span class="d">7</span><span class="d">8</span><span class="d">9</span><span class="d">10</span><span class="d">11</span><span class="d">12</span><span class="d">13</span>
+          <span class="d">14</span><span class="d on">15</span><span class="d">16</span><span class="d">17</span><span class="d">18</span><span class="d">19</span><span class="d">20</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 詳細パネル -->
+  <section><h2><span class="num">㉚</span>詳細パネル（項目リスト）</h2>
+    <div class="demo col">
+      <div class="kv">
+        <div class="r"><span class="k">氏名</span><span class="v">田中 一郎</span></div>
+        <div class="r"><span class="k">制度</span><span class="v">特定技能</span></div>
+        <div class="r"><span class="k">受入企業</span><span class="v">○○製作所</span></div>
+        <div class="r"><span class="k">在留期限</span><span class="v">2027-03-31</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 操作メニュー -->
+  <section><h2><span class="num">㉛</span>操作メニュー（… kebab・§11で最前面）</h2>
+    <div class="demo" data-menu>
+      <button class="iconbtn">⋯</button>
+      <div class="dropdown"><a>編集</a><a>複製</a><a>削除</a></div>
+    </div>
+  </section>
+
+  <!-- 数量ステッパー -->
+  <section><h2><span class="num">㉜</span>数量ステッパー（±）</h2>
+    <div class="demo">
+      <div class="qty"><button>−</button><span class="n">3</span><button>＋</button></div>
+    </div>
+  </section>
+
+  <!-- スライダー -->
+  <section><h2><span class="num">㉝</span>スライダー</h2>
+    <div class="demo"><input type="range" min="0" max="100" value="60"></div>
+  </section>
+
+  <!-- アイコンボタン -->
+  <section><h2><span class="num">㉞</span>アイコンボタン</h2>
+    <div class="demo">
+      <button class="iconbtn">✎</button><button class="iconbtn">🔍</button><button class="iconbtn">⬇</button><button class="iconbtn">🗑</button>
+    </div>
+  </section>
+
+  <!-- 設定行 -->
+  <section><h2><span class="num">㉟</span>設定行（トグル付き）</h2>
+    <div class="demo col">
+      <div class="setrow"><div class="info"><b>メール通知</b><span>期限が近づいたら知らせる</span></div><label class="toggle"><input type="checkbox" checked><span class="track"></span></label></div>
+      <div class="setrow"><div class="info"><b>自動下書き保存</b><span>入力中の内容を自動で保持</span></div><label class="toggle"><input type="checkbox"><span class="track"></span></label></div>
+    </div>
+  </section>
+
+  <!-- 注釈ボックス -->
+  <section><h2><span class="num">㊱</span>注釈ボックス（ヒント）</h2>
+    <div class="demo col">
+      <div class="callout"><span class="ic">💡</span><div>義務的支援の再委託は禁止（入管法）。記録は登録支援機関の名義で残してください。</div></div>
+    </div>
+  </section>
+
+  <!-- 処理中ボタン -->
+  <section><h2><span class="num">㊲</span>処理中ボタン（ローディング）</h2>
+    <div class="demo"><button class="btn" data-loading>保存する</button></div>
+  </section>
+
+  <!-- 棒グラフ -->
+  <section><h2><span class="num">㊳</span>簡易棒グラフ（単色）</h2>
+    <p class="hint">分類で色分けが要る複数系列は、社長に色を確認（公式色は分類用が限られるため）。</p>
+    <div class="demo col">
+      <div class="barchart">
+        <div class="col"><div class="bar" style="height:50px"></div><span class="lb">4月</span></div>
+        <div class="col"><div class="bar" style="height:80px"></div><span class="lb">5月</span></div>
+        <div class="col"><div class="bar" style="height:110px"></div><span class="lb">6月</span></div>
+        <div class="col"><div class="bar" style="height:70px"></div><span class="lb">7月</span></div>
+      </div>
+    </div>
+  </section>
+
   <p class="note">この見本帳は公開リポ <code>design-system</code> 内。色を増やす・新しい共通部品を作るときは、自分で決めず社長に相談してください（共通部品の判断は社長）。</p>
 
 </div>
@@ -698,6 +827,30 @@ panel.style.position='fixed'; panel.style.display='block';</pre>
   document.getElementById('openDrawer').addEventListener('click',openD);
   document.getElementById('closeDrawer').addEventListener('click',closeD);
   dScrim.addEventListener('click',closeD);
+
+  /* 操作メニュー（kebab）：クリックで開く・§11でbody直下へ最前面 */
+  document.querySelectorAll('[data-menu]').forEach(function(wrap){
+    var btn=wrap.querySelector('button'), menu=wrap.querySelector('.dropdown'); if(!btn||!menu)return;
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      if(menu.style.display==='block'){menu.style.display='none';return;}
+      place(menu,btn,'down');
+    });
+    document.addEventListener('click',function(e){ if(!menu.contains(e.target)&&e.target!==btn) menu.style.display='none'; });
+    menu.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){menu.style.display='none';});});
+  });
+
+  /* 数量ステッパー（±） */
+  document.querySelectorAll('.qty').forEach(function(q){
+    var n=q.querySelector('.n'), b=q.querySelectorAll('button');
+    b[0].addEventListener('click',function(){n.textContent=Math.max(0,parseInt(n.textContent,10)-1);});
+    b[1].addEventListener('click',function(){n.textContent=parseInt(n.textContent,10)+1;});
+  });
+
+  /* 処理中ボタン：押すと一時的にローディング表示 */
+  document.querySelectorAll('[data-loading]').forEach(function(b){
+    b.addEventListener('click',function(){ b.classList.add('loading'); setTimeout(function(){b.classList.remove('loading');},1500); });
+  });
 </script>
 </body>
 </html>
