@@ -6,6 +6,7 @@
 > ・ライブ参照（常に最新）：`https://raw.githubusercontent.com/yawata-dotcom/design-system/main/RULEBOOK.md`
 > ・見本帳（標準部品）：`https://yawata-dotcom.github.io/design-system/gallery.html`
 > ・色トークン：`https://raw.githubusercontent.com/yawata-dotcom/design-system/main/tokens.css`
+> ・**技術・設計方針**（フロント/バック/DB/API/テストの全社方針）：`https://raw.githubusercontent.com/yawata-dotcom/design-system/main/TECH-POLICY.md`
 > 社長がこのファイルを1か所更新すれば、全製品に効く（各製品へ個別配布は不要）。
 
 ## 1. 色（公式カラートークン）
