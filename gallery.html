@@ -137,6 +137,48 @@
 
   .note{font-size:11.5px;color:var(--gray);margin-top:8px;}
   .pill-rule{display:inline-block;background:var(--redbg);color:var(--red);border-radius:6px;padding:1px 7px;font-size:11px;font-weight:700;}
+
+  /* ===== 追加部品（第2歩 続き） ===== */
+  /* タブ／セグメント */
+  .seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px;}
+  .seg button{border:none;background:none;font:inherit;font-size:13px;font-weight:700;color:var(--gray);padding:6px 16px;border-radius:7px;cursor:pointer;}
+  .seg button.on{background:var(--card);color:var(--fblue);box-shadow:0 1px 2px rgba(0,0,0,.12);}
+  .utabs{display:flex;gap:2px;border-bottom:1px solid var(--line);width:100%;}
+  .utabs button{border:none;background:none;font:inherit;font-size:13px;font-weight:700;color:var(--gray);padding:9px 14px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;}
+  .utabs button.on{color:var(--fblue);border-bottom-color:var(--fblue);}
+  /* ステッパー */
+  .steps{display:flex;align-items:center;flex-wrap:wrap;gap:6px;}
+  .steps .step{display:flex;align-items:center;gap:8px;}
+  .steps .dot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:var(--bg);color:var(--gray);border:1px solid var(--line);}
+  .steps .step.done .dot{background:var(--green);color:var(--card);border-color:var(--green);}
+  .steps .step.now .dot{background:var(--fblue);color:var(--card);border-color:var(--fblue);}
+  .steps .lbl{font-size:12.5px;color:var(--gray);}
+  .steps .step.now .lbl,.steps .step.done .lbl{color:var(--text);font-weight:600;}
+  .steps .bar{width:36px;height:2px;background:var(--line);}
+  .steps .bar.done{background:var(--green);}
+  /* ページ送り */
+  .pager{display:inline-flex;gap:4px;align-items:center;}
+  .pager button{min-width:32px;height:32px;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:8px;font:inherit;font-size:13px;cursor:pointer;}
+  .pager button.on{background:var(--fblue);color:var(--card);border-color:var(--fblue);}
+  .pager button:disabled{opacity:.4;cursor:not-allowed;}
+  /* 空状態 */
+  .empty{text-align:center;padding:30px 16px;color:var(--gray);width:100%;}
+  .empty .ico{width:46px;height:46px;border-radius:12px;background:var(--bg);display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px;font-size:22px;}
+  .empty h4{margin:0 0 4px;color:var(--text);font-size:14px;}
+  .empty p{margin:0 0 14px;font-size:12.5px;}
+  /* トースト（alert()の代わり） */
+  .toastwrap{position:fixed;right:18px;bottom:18px;display:flex;flex-direction:column;gap:8px;z-index:2200;}
+  .toast{display:flex;align-items:center;gap:9px;background:var(--text);color:var(--card);border-radius:10px;padding:11px 14px;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.25);min-width:240px;transform:translateY(8px);opacity:0;transition:.25s;}
+  .toast.show{transform:none;opacity:1;}
+  .toast .d{width:8px;height:8px;border-radius:50%;flex:none;}
+  .toast.ok .d{background:var(--green);} .toast.warn .d{background:var(--red);} .toast.note .d{background:var(--orange);}
+  /* 入力の作法 */
+  .field .err{color:var(--red);font-size:11px;}
+  .field.bad input{border-color:var(--red);}
+  .money{position:relative;display:inline-flex;align-items:center;}
+  .money::before{content:"¥";position:absolute;left:10px;color:var(--gray);font-size:13px;}
+  .money input{padding-left:22px;text-align:right;}
+  .name2{display:flex;gap:8px;} .name2 input{width:100px;}
 </style>
 </head>
 <body>
@@ -312,6 +354,66 @@ panel.style.position='fixed'; panel.style.display='block';</pre>
 .acc.open .abody{max-height:600px;opacity:1;}  /* クラス切替で開閉 */</pre>
   </section>
 
+  <!-- タブ -->
+  <section>
+    <h2><span class="num">⑪</span>タブ／セグメント</h2>
+    <div class="demo col">
+      <div class="seg" data-group><button class="on">両方</button><button>技能実習</button><button>特定技能</button></div>
+      <div class="utabs" data-group><button class="on">基本情報</button><button>書類</button><button>履歴</button></div>
+    </div>
+  </section>
+
+  <!-- ステッパー -->
+  <section>
+    <h2><span class="num">⑫</span>ステップ（進捗）</h2>
+    <div class="demo">
+      <div class="steps">
+        <div class="step done"><span class="dot">✓</span><span class="lbl">受付</span></div><span class="bar done"></span>
+        <div class="step now"><span class="dot">2</span><span class="lbl">書類確認</span></div><span class="bar"></span>
+        <div class="step"><span class="dot">3</span><span class="lbl">申請</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ページ送り -->
+  <section>
+    <h2><span class="num">⑬</span>ページ送り</h2>
+    <div class="demo">
+      <div class="pager" data-pager><button disabled>‹</button><button class="on">1</button><button>2</button><button>3</button><button>›</button></div>
+    </div>
+  </section>
+
+  <!-- 空状態 -->
+  <section>
+    <h2><span class="num">⑭</span>空状態（データなし）</h2>
+    <div class="demo col">
+      <div class="card"><div class="empty"><div class="ico">📭</div><h4>まだ登録がありません</h4><p>新しい候補者を登録すると、ここに一覧で表示されます。</p><button class="btn">候補者を登録</button></div></div>
+    </div>
+  </section>
+
+  <!-- トースト -->
+  <section>
+    <h2><span class="num">⑮</span>トースト通知（alert()の代わり） <span class="pill-rule">alert禁止</span></h2>
+    <p class="hint">処理結果は <code>alert()</code> でなく、画面右下のトーストで知らせる（数秒で自動的に消える）。緑=成功／赤=警告／橙=注意。</p>
+    <div class="demo">
+      <button class="btn" data-toast="ok">成功トースト</button>
+      <button class="btn ghost" data-toast="warn">警告トースト</button>
+      <button class="btn ghost" data-toast="note">注意トースト</button>
+    </div>
+  </section>
+
+  <!-- 入力の作法 -->
+  <section>
+    <h2><span class="num">⑯</span>入力の作法（日付・金額・氏名・必須・エラー）</h2>
+    <p class="hint">日付=カレンダー入力／金額=¥＋右寄せ／氏名=姓・名で分割／必須=赤バッジ＋空ならインラインで赤エラー（alertは使わない）。</p>
+    <div class="demo">
+      <div class="field"><label>入社日</label><input type="date" value="2026-06-15"></div>
+      <div class="field"><label>支度金</label><span class="money"><input value="50,000"></span></div>
+      <div class="field"><label>氏名<span class="req">必須</span></label><span class="name2"><input placeholder="姓"><input placeholder="名"></span></div>
+      <div class="field bad"><label>メール<span class="req">必須</span></label><input placeholder="例：a@esupport.jp"><span class="err">⚠ 必須項目です。入力してください。</span></div>
+    </div>
+  </section>
+
   <p class="note">この見本帳は公開リポ <code>design-system</code> 内。色を増やす・新しい共通部品を作るときは、自分で決めず社長に相談してください（共通部品の判断は社長）。</p>
 
 </div>
@@ -324,6 +426,9 @@ panel.style.position='fixed'; panel.style.display='block';</pre>
     <div class="mf"><button class="btn ghost" id="cancelModal">キャンセル</button><button class="btn" id="okModal">送信する</button></div>
   </div>
 </div>
+
+<!-- トーストの置き場（画面右下） -->
+<div class="toastwrap" id="toastwrap"></div>
 
 <script>
   /* 色トークンの見本を自動生成（hexは公式17色なのでCIを通る） */
@@ -391,6 +496,31 @@ panel.style.position='fixed'; panel.style.display='block';</pre>
   document.getElementById('cancelModal').addEventListener('click',closeM);
   document.getElementById('okModal').addEventListener('click',closeM);
   scrim.addEventListener('click',function(e){if(e.target===scrim)closeM();});
+
+  /* タブ／セグメント／ページ送り：同グループ内でON切替（端の ‹ › と無効は除く） */
+  document.querySelectorAll('[data-group],[data-pager]').forEach(function(g){
+    g.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click',function(){
+        if(b.disabled||b.textContent==='‹'||b.textContent==='›')return;
+        g.querySelectorAll('button').forEach(function(x){x.classList.remove('on');});
+        b.classList.add('on');
+      });
+    });
+  });
+
+  /* トースト：alert()の代わり。数秒で自動的に消える */
+  var toastWrap=document.getElementById('toastwrap');
+  function showToast(type){
+    var msg={ok:'登録しました。',warn:'入力に誤りがあります。',note:'あと1名の配置が必要です。'}[type]||'';
+    var t=document.createElement('div'); t.className='toast '+type;
+    t.innerHTML='<span class="d"></span>'+msg;
+    toastWrap.appendChild(t);
+    requestAnimationFrame(function(){t.classList.add('show');});
+    setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove();},300);},2600);
+  }
+  document.querySelectorAll('[data-toast]').forEach(function(b){
+    b.addEventListener('click',function(){showToast(b.getAttribute('data-toast'));});
+  });
 </script>
 </body>
 </html>
