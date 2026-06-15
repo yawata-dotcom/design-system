@@ -1,0 +1,13 @@
+name: design-check
+# 共通デザインの正本リポ自身もチェック（tokens.css 定義は除外、その他にうっかり直書きが無いか）。
+on:
+  push:
+  pull_request:
+
+jobs:
+  colors:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 色チェック（公式17色のみ）
+        run: sh tools/check-colors.sh .
