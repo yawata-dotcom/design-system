@@ -327,6 +327,63 @@
   /* 日付範囲 */
   .daterange{display:inline-flex;align-items:center;gap:8px;}
   .daterange input{font:inherit;font-size:13px;color:var(--text);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:7px 9px;}
+
+  /* ===== 昇格部品（交通誘導警備から標準化・公式トークンで再構成） ===== */
+  /* 需給グリッド（シフト表：行=隊員 列=日、必要数vs配置数） */
+  .shiftgrid{border-collapse:collapse;font-size:12px;width:100%;min-width:540px;background:var(--card);}
+  .shiftgrid th,.shiftgrid td{border:1px solid var(--topbar);padding:5px 4px;text-align:center;}
+  .shiftgrid thead th{background:var(--card);color:var(--gray);font-size:11px;font-weight:700;}
+  .shiftgrid thead th .dn{font-size:13px;color:var(--text);display:block;}
+  .shiftgrid th.sat .dn{color:var(--fblue);} .shiftgrid th.sun .dn{color:var(--red);}
+  .shiftgrid th.nm,.shiftgrid td.nm{text-align:left;background:var(--card);font-weight:600;color:var(--text);position:sticky;left:0;white-space:nowrap;min-width:96px;}
+  .shiftgrid tr.demand td{background:var(--bg);}
+  .shiftgrid .need{display:block;font-size:11px;font-weight:700;color:var(--text);}
+  .shiftgrid .placed{display:block;font-size:10px;color:var(--gray);}
+  .shiftgrid td.hole{background:var(--redbg);color:var(--red);font-weight:700;}
+  .shiftgrid td.und{background:var(--orangebg);color:var(--orange);font-weight:700;}
+  .shiftgrid td.on{background:var(--activebg);color:var(--fblue);font-weight:700;}
+  /* 問題ナビ（要対応チップ＋カード） */
+  .alertbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;width:100%;}
+  .alertbar .lead{font-weight:800;font-size:13px;display:flex;align-items:center;gap:6px;color:var(--text);}
+  .chip-c{font-size:12px;font-weight:700;border-radius:20px;padding:3px 10px;display:inline-flex;gap:5px;align-items:center;cursor:pointer;}
+  .chip-c.red{background:var(--redbg);color:var(--red);} .chip-c.orange{background:var(--orangebg);color:var(--orange);} .chip-c.green{background:var(--greenbg);color:var(--green);}
+  .todocard{display:flex;gap:10px;align-items:flex-start;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card);cursor:pointer;width:100%;}
+  .todocard:hover{background:var(--topbar);}
+  .todocard .tg{font-size:10px;font-weight:800;border-radius:9px;padding:2px 7px;white-space:nowrap;margin-top:1px;}
+  .todocard .tg.red{background:var(--redbg);color:var(--red);} .todocard .tg.orange{background:var(--orangebg);color:var(--orange);}
+  .todocard .tx{font-size:12px;line-height:1.5;flex:1;color:var(--text);}
+  /* セル割当ポップオーバー（吹き出し付き・§11でbody直下） */
+  .pop{position:fixed;width:240px;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 36px rgba(0,0,0,.18);z-index:2000;display:none;}
+  .pop::before{content:"";position:absolute;top:-7px;left:24px;width:13px;height:13px;background:var(--card);border-left:1px solid var(--line);border-top:1px solid var(--line);transform:rotate(45deg);}
+  .pop .ph{padding:9px 12px;border-bottom:1px solid var(--line);font-weight:800;font-size:12.5px;color:var(--text);}
+  .pop .opt{display:flex;align-items:center;gap:9px;padding:8px 12px;cursor:pointer;font-size:12.5px;color:var(--text);}
+  .pop .opt:hover{background:var(--topbar);color:var(--fblue);}
+  /* 円ゲージ（単値ドーナツ） */
+  .gauge{position:relative;width:120px;height:120px;}
+  .gauge svg{transform:rotate(-90deg);display:block;}
+  .gauge .gtrack{fill:none;stroke:var(--topbar);stroke-width:12;}
+  .gauge .gval{fill:none;stroke:var(--fblue);stroke-width:12;stroke-linecap:round;}
+  .gauge .gctr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .gauge .gpct{font-size:28px;font-weight:800;color:var(--fblue);line-height:1;}
+  .gauge .gpct small{font-size:14px;}
+  .gauge .gpl{font-size:10px;color:var(--gray);margin-top:2px;}
+  /* パイプライン（カード型ステップ） */
+  .pipe{display:flex;align-items:stretch;flex-wrap:wrap;gap:7px;width:100%;}
+  .pstep2{flex:1 1 100px;min-width:96px;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:11px 10px;text-align:center;}
+  .pstep2 .pn{font-size:12px;font-weight:800;color:var(--text);}
+  .pstep2 .ps{font-size:10.5px;color:var(--gray);margin-top:3px;}
+  .pstep2.on{background:var(--topbar);border-color:var(--activebg);} .pstep2.on .pn{color:var(--fblue);}
+  .pstep2.done{background:var(--greenbg);border-color:var(--greenbg);} .pstep2.done .pn{color:var(--green);}
+  .parrow2{display:flex;align-items:center;color:var(--gray);font-weight:800;font-size:15px;}
+  /* アプリ/事業ランチャー */
+  .applauncher{width:30px;height:30px;border:none;background:var(--bg);border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;}
+  .applauncher:hover{background:var(--activebg);}
+  .launchpanel{position:fixed;display:none;z-index:2000;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 14px 36px rgba(0,0,0,.18);padding:8px;min-width:210px;}
+  .launchpanel .lph{font-size:11px;color:var(--gray);font-weight:800;padding:4px 8px;}
+  .launchpanel .lpi{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;font-size:13px;color:var(--text);cursor:pointer;text-decoration:none;}
+  .launchpanel .lpi:hover{background:var(--topbar);color:var(--fblue);}
+  .launchpanel .lpi.on{color:var(--fblue);font-weight:700;}
+  .launchpanel .lpsoon{margin-left:auto;font-size:9px;color:var(--gray);}
 </style>
 </head>
 <body>
@@ -852,6 +909,85 @@ panel.style.position='fixed'; panel.style.display='block';</pre>
     </div>
   </section>
 
+  <div class="lead" style="margin-top:34px">↓ ここから下は、交通誘導警備から<b>標準化（昇格）</b>した部品です（公式トークンで再構成）。</div>
+
+  <!-- 需給グリッド -->
+  <section><h2><span class="num">㊺</span>需給グリッド（シフト表：必要数 vs 配置数）</h2>
+    <p class="hint">行＝隊員・列＝日。上段に必要数/配置数、穴＝赤・所定割れ＝橙で色分け。</p>
+    <div class="demo col" style="overflow-x:auto">
+      <table class="shiftgrid">
+        <thead><tr><th class="nm">隊員</th><th><span class="dn">14</span>金</th><th class="sat"><span class="dn">15</span>土</th><th class="sun"><span class="dn">16</span>日</th><th><span class="dn">17</span>月</th></tr></thead>
+        <tbody>
+          <tr class="demand"><td class="nm">A現場（必要/配置）</td><td><span class="need">2/2</span></td><td class="hole"><span class="need">3/1</span><span class="placed">穴2</span></td><td class="und"><span class="need">2/1</span><span class="placed">割れ</span></td><td><span class="need">2/2</span></td></tr>
+          <tr><td class="nm">山田 太郎</td><td class="on">日勤</td><td class="on">日勤</td><td></td><td class="on">日勤</td></tr>
+          <tr><td class="nm">佐藤 次郎</td><td class="on">夜勤</td><td></td><td class="on">日勤</td><td class="on">夜勤</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 問題ナビ -->
+  <section><h2><span class="num">㊻</span>問題ナビ（要対応チップ＋カード）</h2>
+    <p class="hint">不足・所定割れ等を件数チップで示し、直すカードへ誘導。</p>
+    <div class="demo col">
+      <div class="alertbar"><span class="lead">⚠ 要対応</span><span class="chip-c red">穴 2</span><span class="chip-c orange">所定割れ 1</span><span class="chip-c orange">資格NG 1</span></div>
+      <div class="todocard"><span class="tg red">穴</span><div class="tx"><b>6/15 A現場 日勤が2名不足。</b>出勤可能な候補者を配置してください。</div></div>
+      <div class="todocard"><span class="tg orange">割れ</span><div class="tx"><b>佐藤 次郎が所定労働時間を下回ります。</b>シフトを調整してください。</div></div>
+    </div>
+  </section>
+
+  <!-- ポップオーバー -->
+  <section><h2><span class="num">㊼</span>セル割当ポップオーバー（吹き出し・§11で最前面）</h2>
+    <p class="hint">表のセルを押して、その場で候補を選ぶ小窓。開くとbody直下＋最前面。</p>
+    <div class="demo">
+      <button class="btn ghost" id="popBtn">セルを選択 ▾</button>
+      <div class="pop" id="popPanel">
+        <div class="ph">6/15 A現場 日勤に配置</div>
+        <a class="opt">山田 太郎（空き）</a><a class="opt">鈴木 三郎（空き）</a><a class="opt">高橋 四郎（要確認）</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 円ゲージ -->
+  <section><h2><span class="num">㊽</span>円ゲージ（単値ドーナツ）</h2>
+    <div class="demo">
+      <div class="gauge">
+        <svg viewBox="0 0 120 120" width="120" height="120" aria-label="円ゲージ 78%">
+          <circle class="gtrack" cx="60" cy="60" r="44"/>
+          <circle class="gval" cx="60" cy="60" r="44" stroke-dasharray="215.6 276.5"/>
+        </svg>
+        <div class="gctr"><span class="gpct">78<small>%</small></span><span class="gpl">定着予想</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- パイプライン -->
+  <section><h2><span class="num">㊾</span>パイプライン（カード型ステップ）</h2>
+    <div class="demo col">
+      <div class="pipe">
+        <div class="pstep2 done"><div class="pn">受付</div><div class="ps">完了</div></div>
+        <div class="parrow2">›</div>
+        <div class="pstep2 done"><div class="pn">書類</div><div class="ps">完了</div></div>
+        <div class="parrow2">›</div>
+        <div class="pstep2 on"><div class="pn">面接</div><div class="ps">進行中</div></div>
+        <div class="parrow2">›</div>
+        <div class="pstep2"><div class="pn">配置</div><div class="ps">未着手</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ランチャー -->
+  <section><h2><span class="num">㊿</span>アプリ/事業ランチャー（左上の切替）</h2>
+    <p class="hint">事業間を切り替えるグリッドメニュー。開くと最前面（§11）。</p>
+    <div class="demo">
+      <button class="applauncher" id="launchBtn" aria-label="事業を切り替え"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="5" cy="5" r="2.1" fill="#dc1e32"/><circle cx="12" cy="5" r="2.1" fill="#be8c14"/><circle cx="19" cy="5" r="2.1" fill="#be8c14"/><circle cx="5" cy="12" r="2.1" fill="#00963c"/><circle cx="12" cy="12" r="2.1" fill="#00b9b9"/><circle cx="19" cy="12" r="2.1" fill="#285ac8"/><circle cx="5" cy="19" r="2.1" fill="#285ac8"/><circle cx="12" cy="19" r="2.1" fill="#285ac8"/><circle cx="19" cy="19" r="2.1" fill="#dc1e32"/></svg></button>
+      <div class="launchpanel" id="launchPanel">
+        <div class="lph">事業を切り替え</div>
+        <a class="lpi on">交通誘導警備</a><a class="lpi">人材事業</a><a class="lpi">施設保安警備<span class="lpsoon">近日</span></a><a class="lpi">宿泊事業<span class="lpsoon">近日</span></a>
+      </div>
+    </div>
+  </section>
+
   <p class="note">この見本帳は公開リポ <code>design-system</code> 内。色を増やす・新しい共通部品を作るときは、自分で決めず社長に相談してください（共通部品の判断は社長）。</p>
 
 </div>
@@ -1048,6 +1184,18 @@ panel.style.position='fixed'; panel.style.display='block';</pre>
       o.addEventListener('click',function(){ var v=o.getAttribute('data-val'); var i=sel.indexOf(v); if(i>-1){sel.splice(i,1);o.classList.remove('on');}else{sel.push(v);o.classList.add('on');} render(); });
     });
     document.addEventListener('click',function(e){ if(!m.contains(e.target)) m.classList.remove('open'); });
+  });
+
+  /* セル割当ポップオーバー・アプリランチャー：クリックで開く・§11でbody直下へ最前面 */
+  [['popBtn','popPanel'],['launchBtn','launchPanel']].forEach(function(pair){
+    var btn=document.getElementById(pair[0]), panel=document.getElementById(pair[1]); if(!btn||!panel)return;
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      if(panel.style.display==='block'){panel.style.display='none';return;}
+      place(panel,btn,'down');
+    });
+    document.addEventListener('click',function(e){ if(!panel.contains(e.target)&&!btn.contains(e.target)) panel.style.display='none'; });
+    panel.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){panel.style.display='none';});});
   });
 </script>
 </body>
