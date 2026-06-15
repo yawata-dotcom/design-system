@@ -179,6 +179,67 @@
   .money::before{content:"¥";position:absolute;left:10px;color:var(--gray);font-size:13px;}
   .money input{padding-left:22px;text-align:right;}
   .name2{display:flex;gap:8px;} .name2 input{width:100px;}
+
+  /* ===== 追加部品（その2） ===== */
+  /* 検索 */
+  .search{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;background:var(--card);padding:7px 12px;min-width:240px;}
+  .search input{border:none;outline:none;background:none;font:inherit;font-size:13px;color:var(--text);flex:1;}
+  .search .ic{color:var(--gray);}
+  /* ラジオ／テキストエリア／ファイル */
+  .radiorow{display:flex;align-items:center;gap:8px;font-size:13px;}
+  .radiorow input{width:16px;height:16px;accent-color:var(--fblue);}
+  .field textarea{min-height:72px;resize:vertical;font:inherit;font-size:13px;color:var(--text);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;outline:none;}
+  .filebox{border:1.5px dashed var(--line);border-radius:10px;background:var(--bg);padding:20px;text-align:center;color:var(--gray);font-size:12.5px;width:100%;}
+  .filebox b{color:var(--fblue);}
+  /* アバター・人物 */
+  .avatar{width:34px;height:34px;border-radius:50%;background:var(--activebg);color:var(--fblue-dark);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;}
+  .person{display:flex;align-items:center;gap:10px;}
+  .person .pn{font-size:13px;font-weight:600;color:var(--text);}
+  .person .ps{font-size:11.5px;color:var(--gray);}
+  /* 進捗バー */
+  .progress{height:8px;background:var(--bg);border-radius:99px;overflow:hidden;width:200px;}
+  .progress > i{display:block;height:100%;background:var(--fblue);border-radius:99px;}
+  /* KPI */
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:150px;}
+  .kpi .k{font-size:12px;color:var(--gray);}
+  .kpi .v{font-size:24px;font-weight:800;color:var(--text);margin-top:2px;}
+  .kpi .t{font-size:11.5px;color:var(--green);margin-top:2px;}
+  .kpi .t.down{color:var(--red);}
+  /* タグ（削除可） */
+  .tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;background:var(--activebg);color:var(--fblue-dark);border-radius:7px;padding:4px 8px;}
+  .tag button{border:none;background:none;color:var(--fblue-dark);cursor:pointer;font-size:13px;line-height:1;padding:0;}
+  /* パンくず */
+  .crumb{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--gray);}
+  .crumb a{color:var(--link);text-decoration:none;cursor:pointer;} .crumb .sep{color:var(--line);}
+  .crumb .cur{color:var(--text);font-weight:600;}
+  /* タイムライン */
+  .timeline{position:relative;padding-left:20px;}
+  .timeline::before{content:"";position:absolute;left:5px;top:4px;bottom:4px;width:2px;background:var(--line);}
+  .tl{position:relative;padding:0 0 14px;}
+  .tl:last-child{padding-bottom:0;}
+  .tl::before{content:"";position:absolute;left:-19px;top:3px;width:10px;height:10px;border-radius:50%;background:var(--fblue);border:2px solid var(--card);}
+  .tl .tt{font-size:13px;font-weight:600;color:var(--text);}
+  .tl .td{font-size:11.5px;color:var(--gray);}
+  /* スケルトン・スピナー */
+  .sk{background:var(--bg);border-radius:6px;height:12px;overflow:hidden;position:relative;}
+  .sk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);transform:translateX(-100%);animation:sksweep 1.2s infinite;}
+  @keyframes sksweep{to{transform:translateX(100%);}}
+  .spinner{width:22px;height:22px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--fblue);animation:spin .8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  /* ドロワー（横スライド） */
+  .drawer-scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:2150;}
+  .drawer-scrim.open{display:block;}
+  .drawer{position:fixed;top:0;right:0;height:100%;width:320px;max-width:88vw;background:var(--card);box-shadow:-12px 0 36px rgba(0,0,0,.2);transform:translateX(100%);transition:transform .3s ease;z-index:2160;display:flex;flex-direction:column;}
+  .drawer.open{transform:none;}
+  .drawer .dh{padding:14px 18px;border-bottom:1px solid var(--line);font-weight:700;display:flex;align-items:center;}
+  .drawer .dh button{margin-left:auto;border:none;background:none;font-size:18px;color:var(--gray);cursor:pointer;}
+  .drawer .db{padding:18px;font-size:13px;color:var(--gray);}
+  /* 通知バッジ（数） */
+  .countbtn{position:relative;border:1px solid var(--line);background:var(--card);border-radius:8px;width:38px;height:34px;font-size:16px;cursor:pointer;}
+  .countbtn .cnt{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;border-radius:99px;background:var(--red);color:var(--card);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px;}
+  /* 区切り・見出し */
+  .divider{height:1px;background:var(--line);width:100%;}
+  .sechd{font-size:11px;font-weight:700;color:var(--gray);}
 </style>
 </head>
 <body>
@@ -414,6 +475,102 @@ panel.style.position='fixed'; panel.style.display='block';</pre>
     </div>
   </section>
 
+  <!-- 検索 -->
+  <section><h2><span class="num">⑰</span>検索・絞り込み</h2>
+    <div class="demo col">
+      <div class="search"><span class="ic">🔍</span><input placeholder="氏名・企業名で検索"></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip on">すべて</span><span class="chip">技能実習</span><span class="chip">特定技能</span><span class="chip">未対応のみ</span></div>
+    </div>
+  </section>
+
+  <!-- ラジオ/テキストエリア/ファイル -->
+  <section><h2><span class="num">⑱</span>ラジオ・テキストエリア・ファイル添付</h2>
+    <div class="demo col">
+      <div style="display:flex;gap:18px"><label class="radiorow"><input type="radio" name="rg" checked>組合</label><label class="radiorow"><input type="radio" name="rg">Esupport</label></div>
+      <div class="field" style="width:100%"><label>備考</label><textarea placeholder="メモを入力"></textarea></div>
+      <div class="filebox">ここにファイルをドラッグ、または <b>ファイルを選択</b>（履歴書・在留カード等）</div>
+    </div>
+  </section>
+
+  <!-- アバター・人物 -->
+  <section><h2><span class="num">⑲</span>アバター・人物表示</h2>
+    <div class="demo">
+      <span class="avatar">山</span><span class="avatar">佐</span>
+      <div class="person"><span class="avatar">田</span><div><div class="pn">田中 一郎</div><div class="ps">担当者・特定技能</div></div></div>
+    </div>
+  </section>
+
+  <!-- 進捗バー -->
+  <section><h2><span class="num">⑳</span>進捗バー</h2>
+    <div class="demo col">
+      <div class="progress"><i style="width:35%"></i></div>
+      <div class="progress"><i style="width:80%"></i></div>
+    </div>
+  </section>
+
+  <!-- KPI -->
+  <section><h2><span class="num">㉑</span>数値カード（KPI）</h2>
+    <div class="demo">
+      <div class="kpi"><div class="k">今月の受入</div><div class="v">12</div><div class="t">前月比 +3</div></div>
+      <div class="kpi"><div class="k">未対応</div><div class="v">4</div><div class="t down">要対応</div></div>
+    </div>
+  </section>
+
+  <!-- タグ -->
+  <section><h2><span class="num">㉒</span>タグ（削除できる）</h2>
+    <div class="demo" data-tags>
+      <span class="tag">製造業 <button aria-label="削除">×</button></span>
+      <span class="tag">長野 <button aria-label="削除">×</button></span>
+      <span class="tag">特定技能 <button aria-label="削除">×</button></span>
+    </div>
+  </section>
+
+  <!-- パンくず -->
+  <section><h2><span class="num">㉓</span>パンくず（現在地）</h2>
+    <div class="demo">
+      <div class="crumb"><a>ホーム</a><span class="sep">›</span><a>候補者</a><span class="sep">›</span><span class="cur">田中 一郎</span></div>
+    </div>
+  </section>
+
+  <!-- タイムライン -->
+  <section><h2><span class="num">㉔</span>タイムライン（履歴）</h2>
+    <div class="demo col">
+      <div class="timeline">
+        <div class="tl"><div class="tt">書類を受領</div><div class="td">2026-06-15 10:20 ・ 田中</div></div>
+        <div class="tl"><div class="tt">企業へ送付</div><div class="td">2026-06-14 16:00 ・ 佐藤</div></div>
+        <div class="tl"><div class="tt">受付</div><div class="td">2026-06-12 09:00 ・ 山田</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 読み込み中 -->
+  <section><h2><span class="num">㉕</span>読み込み中（スケルトン・スピナー）</h2>
+    <div class="demo col">
+      <div style="display:flex;flex-direction:column;gap:8px;width:280px"><div class="sk" style="width:60%"></div><div class="sk"></div><div class="sk" style="width:80%"></div></div>
+      <div class="spinner"></div>
+    </div>
+  </section>
+
+  <!-- ドロワー -->
+  <section><h2><span class="num">㉖</span>ドロワー（横から出るパネル）</h2>
+    <p class="hint">詳細や設定を、横からスライドで開く。背景は暗く。</p>
+    <div class="demo"><button class="btn" id="openDrawer">ドロワーを開く</button></div>
+  </section>
+
+  <!-- 通知バッジ -->
+  <section><h2><span class="num">㉗</span>通知バッジ（数）</h2>
+    <div class="demo"><button class="countbtn">🔔<span class="cnt">3</span></button><button class="countbtn">✉<span class="cnt">12</span></button></div>
+  </section>
+
+  <!-- 区切り・見出し -->
+  <section><h2><span class="num">㉘</span>区切り・セクション見出し</h2>
+    <div class="demo col">
+      <div class="sechd">基本情報</div>
+      <div class="divider"></div>
+      <div class="sechd">在留・ビザ</div>
+    </div>
+  </section>
+
   <p class="note">この見本帳は公開リポ <code>design-system</code> 内。色を増やす・新しい共通部品を作るときは、自分で決めず社長に相談してください（共通部品の判断は社長）。</p>
 
 </div>
@@ -429,6 +586,13 @@ panel.style.position='fixed'; panel.style.display='block';</pre>
 
 <!-- トーストの置き場（画面右下） -->
 <div class="toastwrap" id="toastwrap"></div>
+
+<!-- ドロワー -->
+<div class="drawer-scrim" id="drawerScrim"></div>
+<aside class="drawer" id="drawer">
+  <div class="dh">詳細<button id="closeDrawer" aria-label="閉じる">×</button></div>
+  <div class="db">ここに詳細情報や設定が入ります。背景クリックか × で閉じます。</div>
+</aside>
 
 <script>
   /* 色トークンの見本を自動生成（hexは公式17色なのでCIを通る） */
@@ -521,6 +685,19 @@ panel.style.position='fixed'; panel.style.display='block';</pre>
   document.querySelectorAll('[data-toast]').forEach(function(b){
     b.addEventListener('click',function(){showToast(b.getAttribute('data-toast'));});
   });
+
+  /* タグ削除（× で消える） */
+  document.querySelectorAll('[data-tags]').forEach(function(w){
+    w.addEventListener('click',function(e){ if(e.target.tagName==='BUTTON') e.target.closest('.tag').remove(); });
+  });
+
+  /* ドロワー（横スライド・背景クリックや × で閉じる） */
+  var dScrim=document.getElementById('drawerScrim'), drawer=document.getElementById('drawer');
+  function openD(){drawer.classList.add('open');dScrim.classList.add('open');}
+  function closeD(){drawer.classList.remove('open');dScrim.classList.remove('open');}
+  document.getElementById('openDrawer').addEventListener('click',openD);
+  document.getElementById('closeDrawer').addEventListener('click',closeD);
+  dScrim.addEventListener('click',closeD);
 </script>
 </body>
 </html>
