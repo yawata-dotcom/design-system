@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>共通デザイン 見本帳｜Esupport / Esecurity</title>
+<!-- 色の唯一の正：tokens.css（このリポの公式17色）。直書きの色は使わない。 -->
+<link rel="stylesheet" href="tokens.css">
+<style>
+  /* ===== 見本帳の土台（すべて公式トークン or 影=rgba黒/白のみ） ===== */
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue","Hiragino Kaku Gothic ProN","Hiragino Sans",Arial,Meiryo,sans-serif;
+    color:var(--text);background:var(--bg);font-size:14px;line-height:1.55;}
+  a{color:var(--link);}
+  code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
+
+  .wrap{max-width:980px;margin:0 auto;padding:28px 20px 80px;}
+  .pagehd{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:8px;}
+  .pagehd .mark{width:36px;height:36px;border-radius:9px;background:var(--fblue);color:var(--card);display:flex;align-items:center;justify-content:center;font-weight:800;}
+  .pagehd h1{font-size:20px;margin:0;}
+  .pagehd p{margin:2px 0 0;font-size:12.5px;color:var(--gray);}
+
+  .lead{background:var(--topbar);border:1px solid var(--activebg);border-radius:10px;padding:12px 16px;font-size:13px;margin:18px 0 28px;}
+  .lead b{color:var(--fblue-dark);}
+
+  section{margin:34px 0;}
+  h2{font-size:16px;margin:0 0 4px;padding-top:6px;border-top:2px solid var(--activebg);padding-top:18px;}
+  h2 .num{color:var(--fblue);font-weight:800;margin-right:8px;}
+  .hint{font-size:12px;color:var(--gray);margin:0 0 14px;}
+  .demo{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;}
+  .demo.col{flex-direction:column;align-items:stretch;}
+  pre.code{background:var(--text);color:var(--card);border-radius:8px;padding:12px 14px;font-size:12px;line-height:1.6;overflow:auto;margin:10px 0 0;white-space:pre;}
+  pre.code .t{color:var(--activebg);}
+
+  /* ---- 色トークンの見本 ---- */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;width:100%;}
+  .sw{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--card);}
+  .sw .chip{height:46px;}
+  .sw .meta{padding:6px 9px;font-size:11px;}
+  .sw .meta b{display:block;font-size:11.5px;}
+  .sw .meta span{color:var(--gray);}
+
+  /* ===== ① 標準部品（製品はこれをコピーして使う） ===== */
+  /* ボタン */
+  .btn{font:inherit;font-size:13px;font-weight:700;border-radius:8px;padding:8px 16px;cursor:pointer;border:1px solid var(--fblue);background:var(--fblue);color:var(--card);transition:.12s;}
+  .btn:hover{background:var(--fblue-dark);border-color:var(--fblue-dark);}
+  .btn.ghost{background:var(--card);color:var(--fblue);}
+  .btn.ghost:hover{background:var(--topbar);}
+  .btn.sm{padding:5px 11px;font-size:12px;}
+  .btn:disabled{opacity:.45;cursor:not-allowed;}
+
+  /* カード */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.05);}
+  .card .ch{padding:12px 16px;border-bottom:1px solid var(--line);font-weight:700;font-size:13.5px;}
+  .card .cb{padding:14px 16px;font-size:13px;}
+
+  /* フォーム */
+  .field{display:flex;flex-direction:column;gap:5px;font-size:12.5px;min-width:200px;}
+  .field label{font-weight:700;color:var(--text);}
+  .field .req{color:var(--red);font-size:11px;margin-left:4px;}
+  .field input,.field select,.field textarea{font:inherit;font-size:13px;color:var(--text);background:var(--card);
+    border:1px solid var(--line);border-radius:8px;padding:8px 10px;outline:none;}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--fblue);box-shadow:0 0 0 3px var(--activebg);}
+  .chkrow{display:flex;align-items:center;gap:8px;font-size:13px;}
+  .chkrow input{width:16px;height:16px;accent-color:var(--fblue);}
+  /* トグル */
+  .toggle{position:relative;display:inline-flex;width:42px;height:24px;}
+  .toggle input{opacity:0;width:0;height:0;}
+  .toggle .track{position:absolute;inset:0;background:var(--line);border-radius:99px;transition:.2s;}
+  .toggle .track::before{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--card);transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.3);}
+  .toggle input:checked + .track{background:var(--fblue);}
+  .toggle input:checked + .track::before{transform:translateX(18px);}
+
+  /* バッジ／ピル */
+  .badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;border-radius:99px;padding:3px 10px;}
+  .badge.blue{background:var(--activebg);color:var(--fblue-dark);}
+  .badge.teal{background:var(--tealbg);color:var(--teal);}
+  .badge.green{background:var(--greenbg);color:var(--green);}
+  .badge.red{background:var(--redbg);color:var(--red);}
+  .badge.orange{background:var(--orangebg);color:var(--orange);}
+  .badge.gray{background:var(--bg);color:var(--gray);}
+  .chip{font-size:11px;font-weight:700;border:1px solid var(--line);border-radius:14px;padding:4px 12px;background:var(--card);color:var(--gray);cursor:pointer;}
+  .chip.on{background:var(--fblue);color:var(--card);border-color:var(--fblue);}
+
+  /* バナー（赤=警告/緑=成功/橙=注意） */
+  .banner{display:flex;align-items:center;gap:10px;border-radius:8px;padding:10px 14px;font-size:13px;width:100%;border:1px solid var(--line);background:var(--card);}
+  .banner b{font-weight:700;}
+  .banner.warn{border-color:var(--red);} .banner.warn b{color:var(--red);}
+  .banner.ok{border-color:var(--green);} .banner.ok b{color:var(--green);}
+  .banner.note{border-color:var(--orange);} .banner.note b{color:var(--orange);}
+
+  /* 表 */
+  table.tbl{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  table.tbl th,table.tbl td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);}
+  table.tbl thead th{background:var(--bg);color:var(--gray);font-weight:700;font-size:12px;}
+  table.tbl tbody tr:last-child td{border-bottom:none;}
+  table.tbl tbody tr:hover{background:var(--topbar);}
+
+  /* ===== ② 画面の骨格（ナビ） ===== */
+  .shell{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;width:100%;min-height:230px;background:var(--card);}
+  .shell .side{width:180px;flex:none;background:var(--card);border-right:1px solid var(--line);padding:10px;display:flex;flex-direction:column;gap:2px;}
+  .shell .seclabel{font-size:10.5px;color:var(--gray);padding:8px 8px 2px;}
+  .shell .item{display:flex;align-items:center;gap:8px;border:none;background:none;color:var(--text);font:inherit;font-size:13px;font-weight:600;text-align:left;padding:8px 10px;border-radius:8px;cursor:pointer;width:100%;}
+  .shell .item:hover{background:var(--topbar);}
+  .shell .item.active{background:var(--activebg);color:var(--fblue);font-weight:700;}
+  .shell .item .chev{margin-left:auto;color:var(--gray);}
+  .shell .main{flex:1;display:flex;flex-direction:column;}
+  .shell .topbar{height:46px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:0 16px;font-size:12.5px;color:var(--gray);}
+  .shell .body{padding:16px;font-size:13px;color:var(--gray);}
+
+  /* ===== ③ 重ねUI（§11：必ず最前面。bodyへ出す＋fixed＋z-index大） ===== */
+  .hasflyout{position:relative;}
+  .flyout,.dropdown,.tip{position:fixed;display:none;z-index:2000;background:var(--card);border:1px solid var(--line);
+    border-radius:10px;box-shadow:0 14px 36px rgba(0,0,0,.18);padding:8px;}
+  .flyout a,.dropdown a{display:block;padding:8px 12px;border-radius:7px;font-size:13px;color:var(--text);text-decoration:none;cursor:pointer;white-space:nowrap;}
+  .flyout a:hover,.dropdown a:hover{background:var(--topbar);color:var(--fblue);}
+  .tip{max-width:240px;padding:8px 11px;font-size:11.5px;background:var(--text);color:var(--card);border:none;}
+  .infotip{display:inline-flex;}
+  .infotip .ii{width:16px;height:16px;border-radius:50%;border:1.4px solid var(--gray);color:var(--gray);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;cursor:help;}
+
+  /* ===== ④ ダイアログ（modal：fixed・スクリム・最前面） ===== */
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-start;justify-content:center;padding:40px 16px;z-index:2100;}
+  .scrim.open{display:flex;}
+  .modal{background:var(--card);border-radius:12px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden;}
+  .modal .mh{padding:14px 18px;border-bottom:1px solid var(--line);font-weight:700;}
+  .modal .mb{padding:18px;font-size:13px;}
+  .modal .mf{padding:12px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;}
+
+  /* ===== ⑤ 折りたたみ（スライド0.7s。details/即時display禁止） ===== */
+  .acc{border:1px solid var(--line);border-radius:10px;overflow:hidden;width:100%;background:var(--card);}
+  .acc .achd{display:flex;align-items:center;gap:8px;padding:12px 16px;cursor:pointer;font-weight:700;font-size:13.5px;user-select:none;}
+  .acc .achd .chev{margin-left:auto;color:var(--gray);transition:transform .3s;}
+  .acc.open .achd .chev{transform:rotate(180deg);}
+  .acc .abody{overflow:hidden;max-height:0;opacity:0;transition:max-height .7s ease-in-out,opacity .5s ease;}
+  .acc.open .abody{max-height:600px;opacity:1;}
+  .acc .abody-inner{padding:4px 16px 16px;font-size:13px;color:var(--gray);}
+
+  .note{font-size:11.5px;color:var(--gray);margin-top:8px;}
+  .pill-rule{display:inline-block;background:var(--redbg);color:var(--red);border-radius:6px;padding:1px 7px;font-size:11px;font-weight:700;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="pagehd">
+    <div class="mark">E</div>
+    <div>
+      <h1>共通デザイン 見本帳（スタイルガイド）</h1>
+      <p>Esupport / Esecurity 全プロダクト共通。色＝<code>tokens.css</code>（公式17色）／作法＝<code>RULEBOOK.md</code>。<b>この見た目に揃えてください。</b></p>
+    </div>
+  </div>
+
+  <div class="lead">
+    使い方：各部品の下のコードを<b>コピーして使う</b>。色は必ず <code>var(--token)</code>（直書きの色は禁止＝CIではじかれます）。
+    重ねUI（メニュー・ドロップダウン・ツールチップ等）は <b>必ず最前面</b>（§11）、折りたたみは <b>スライド0.7s</b>。
+    独自部品を作りたくなったら、まず社長に相談。
+  </div>
+
+  <!-- 色トークン -->
+  <section>
+    <h2><span class="num">色</span>カラートークン（17値・確定・不変）</h2>
+    <p class="hint">この17色だけを使う。意味：緑=OK／赤=警告／橙=注意／青=基調・操作／青緑=分類アクセント。</p>
+    <div class="swatches" id="swatches"></div>
+  </section>
+
+  <!-- ボタン -->
+  <section>
+    <h2><span class="num">①</span>ボタン</h2>
+    <div class="demo">
+      <button class="btn">主ボタン</button>
+      <button class="btn ghost">淡ボタン</button>
+      <button class="btn sm">小</button>
+      <button class="btn" disabled>無効</button>
+    </div>
+    <pre class="code">&lt;button class="<span class="t">btn</span>"&gt;主ボタン&lt;/button&gt;
+&lt;button class="<span class="t">btn ghost</span>"&gt;淡ボタン&lt;/button&gt;</pre>
+  </section>
+
+  <!-- カード -->
+  <section>
+    <h2><span class="num">②</span>カード</h2>
+    <div class="demo">
+      <div class="card" style="width:280px">
+        <div class="ch">カードの見出し</div>
+        <div class="cb">本文。面は <code>--card</code>、枠は <code>--line</code>、角丸10px。</div>
+      </div>
+    </div>
+    <pre class="code">&lt;div class="<span class="t">card</span>"&gt;
+  &lt;div class="<span class="t">ch</span>"&gt;見出し&lt;/div&gt;
+  &lt;div class="<span class="t">cb</span>"&gt;本文&lt;/div&gt;
+&lt;/div&gt;</pre>
+  </section>
+
+  <!-- フォーム -->
+  <section>
+    <h2><span class="num">③</span>入力・選択・チェック・トグル</h2>
+    <div class="demo">
+      <div class="field"><label>氏名<span class="req">必須</span></label><input placeholder="山田 太郎"></div>
+      <div class="field"><label>制度</label><select><option>技能実習</option><option>特定技能</option></select></div>
+      <label class="chkrow"><input type="checkbox" checked> 確認しました</label>
+      <label class="toggle"><input type="checkbox" checked><span class="track"></span></label>
+    </div>
+    <pre class="code">&lt;div class="<span class="t">field</span>"&gt;&lt;label&gt;氏名&lt;span class="<span class="t">req</span>"&gt;必須&lt;/span&gt;&lt;/label&gt;&lt;input&gt;&lt;/div&gt;</pre>
+  </section>
+
+  <!-- バッジ -->
+  <section>
+    <h2><span class="num">④</span>バッジ／ピル／チップ</h2>
+    <p class="hint">制度の色分け＝<b>技能実習=青(blue)／特定技能=青緑(teal)</b>（社長決定）。</p>
+    <div class="demo">
+      <span class="badge blue">技能実習</span>
+      <span class="badge teal">特定技能</span>
+      <span class="badge green">完了</span>
+      <span class="badge red">未提出</span>
+      <span class="badge orange">注意</span>
+      <span class="badge gray">下書き</span>
+      <span class="chip on">絞り込みON</span>
+      <span class="chip">OFF</span>
+    </div>
+    <pre class="code">&lt;span class="<span class="t">badge blue</span>"&gt;技能実習&lt;/span&gt;
+&lt;span class="<span class="t">badge teal</span>"&gt;特定技能&lt;/span&gt;</pre>
+  </section>
+
+  <!-- バナー -->
+  <section>
+    <h2><span class="num">⑤</span>バナー（赤=警告／緑=成功／橙=注意）</h2>
+    <div class="demo col">
+      <div class="banner warn"><b>警告：</b>出勤人数が発注と合っていません。</div>
+      <div class="banner ok"><b>成功：</b>freeeへ登録しました。</div>
+      <div class="banner note"><b>注意：</b>あと1名の配置が必要です。</div>
+    </div>
+    <pre class="code">&lt;div class="<span class="t">banner warn</span>"&gt;&lt;b&gt;警告：&lt;/b&gt;…&lt;/div&gt;</pre>
+  </section>
+
+  <!-- 表 -->
+  <section>
+    <h2><span class="num">⑥</span>表</h2>
+    <div class="demo col">
+      <table class="tbl">
+        <thead><tr><th>氏名</th><th>制度</th><th>状態</th></tr></thead>
+        <tbody>
+          <tr><td>山田 太郎</td><td>技能実習</td><td><span class="badge green">完了</span></td></tr>
+          <tr><td>佐藤 花子</td><td>特定技能</td><td><span class="badge orange">注意</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ナビ -->
+  <section>
+    <h2><span class="num">⑦</span>画面の骨格（サイドメニュー＋上バー）</h2>
+    <p class="hint">「設定」にマウスを乗せると、右にサブメニューが <b>最前面</b>で出ます（§11）。</p>
+    <div class="demo col">
+      <div class="shell">
+        <div class="side">
+          <div class="seclabel">業務</div>
+          <button class="item active">ホーム</button>
+          <button class="item">一覧</button>
+          <div class="seclabel">設定</div>
+          <div class="hasflyout">
+            <button class="item">マスタ <span class="chev">›</span></button>
+            <div class="flyout"><a>紹介会社</a><a>契約先</a><a>単価</a></div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="topbar">最終同期 2026-06-15 ／ 株式会社Esupport</div>
+          <div class="body">メイン領域。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 重ねUI -->
+  <section>
+    <h2><span class="num">⑧</span>重ねUI（§11：必ず最前面） <span class="pill-rule">最重要ルール</span></h2>
+    <p class="hint">ドロップダウン・ツールチップ等は、開いたら <b>body直下へ出す＋position:fixed＋z-index 2000</b>。祖先の overflow / transform / sticky に閉じ込めない。</p>
+    <div class="demo">
+      <div class="hasflyout">
+        <button class="btn ghost" id="ddBtn">ドロップダウン ▾</button>
+        <div class="dropdown" id="dd"><a>選択肢A</a><a>選択肢B</a><a>選択肢C</a></div>
+      </div>
+      <span>ツールチップ
+        <span class="infotip" tabindex="0"><span class="ii">i</span>
+          <span class="tip">マウスを乗せると最前面で説明が出ます。ヘッダーに隠れません。</span>
+        </span>
+      </span>
+    </div>
+    <pre class="code">// 開くとき：bodyへ移動＋位置決め（fixed・z-index2000）。隠れを根治。
+if(panel.parentNode!==document.body) document.body.appendChild(panel);
+panel.style.position='fixed'; panel.style.display='block';</pre>
+  </section>
+
+  <!-- ダイアログ -->
+  <section>
+    <h2><span class="num">⑨</span>ダイアログ（確認）</h2>
+    <div class="demo">
+      <button class="btn" id="openModal">ダイアログを開く</button>
+    </div>
+  </section>
+
+  <!-- 折りたたみ -->
+  <section>
+    <h2><span class="num">⑩</span>折りたたみ（スライド0.7s） <span class="pill-rule">スライド必須</span></h2>
+    <p class="hint">開閉は必ずスライド（クラス切替＋max-height 0.7s）。<code>details</code>・即時display切替・インラインonclickは禁止。</p>
+    <div class="demo col">
+      <div class="acc">
+        <div class="achd">よくある質問：色はどう使う？ <span class="chev">▾</span></div>
+        <div class="abody"><div class="abody-inner">必ず <code>var(--token)</code> で。直書きの色はCIではじかれます。新しい色が要るときは社長に相談。</div></div>
+      </div>
+    </div>
+    <pre class="code">.abody{overflow:hidden;max-height:0;opacity:0;transition:max-height .7s ease-in-out;}
+.acc.open .abody{max-height:600px;opacity:1;}  /* クラス切替で開閉 */</pre>
+  </section>
+
+  <p class="note">この見本帳は公開リポ <code>design-system</code> 内。色を増やす・新しい共通部品を作るときは、自分で決めず社長に相談してください（共通部品の判断は社長）。</p>
+
+</div>
+
+<!-- ダイアログ本体 -->
+<div class="scrim" id="scrim">
+  <div class="modal">
+    <div class="mh">確認</div>
+    <div class="mb">この内容で送信します。よろしいですか？</div>
+    <div class="mf"><button class="btn ghost" id="cancelModal">キャンセル</button><button class="btn" id="okModal">送信する</button></div>
+  </div>
+</div>
+
+<script>
+  /* 色トークンの見本を自動生成（hexは公式17色なのでCIを通る） */
+  var TOKENS=[
+    ["--fblue","#285ac8","主要ボタン・基調"],["--link","#285ac8","リンク"],["--fblue-dark","#1b49b8","濃い青(hover)"],
+    ["--activebg","#dce8ff","選択中の薄い青"],["--topbar","#ebf3ff","いちばん薄い青の面"],
+    ["--teal","#00b9b9","青緑アクセント・分類"],["--tealbg","#e3f6f4","青緑の地"],
+    ["--line","#e1dcdc","枠線・区切り"],["--bg","#f7f5f5","ページ背景"],["--card","#ffffff","カード・面"],
+    ["--gray","#6e6b6b","補助文字"],["--text","#323232","本文"],
+    ["--green","#00963c","成功"],["--greenbg","#cdebd7","成功の地"],
+    ["--red","#dc1e32","警告"],["--redbg","#fad2d7","警告の地"],
+    ["--orange","#be8c14","注意"],["--orangebg","#fff0d2","注意の地"]
+  ];
+  var sw=document.getElementById('swatches');
+  TOKENS.forEach(function(t){
+    var el=document.createElement('div'); el.className='sw';
+    el.innerHTML='<div class="chip" style="background:var('+t[0]+')"></div>'+
+      '<div class="meta"><b>'+t[0]+'</b><span>'+t[1]+' ／ '+t[2]+'</span></div>';
+    sw.appendChild(el);
+  });
+
+  /* §11：重ねUIは body直下へ出して最前面に（ドロップダウン＝クリック、フライアウト/ツールチップ＝ホバー） */
+  function place(panel, anchor, side){
+    if(panel.parentNode!==document.body) document.body.appendChild(panel);
+    panel.style.display='block';
+    var r=anchor.getBoundingClientRect();
+    if(side==='right'){ panel.style.left=(r.right+6)+'px'; panel.style.top=r.top+'px'; }
+    else { panel.style.left=r.left+'px'; panel.style.top=(r.bottom+6)+'px'; }
+  }
+  // ホバー式（フライアウト・ツールチップ）
+  document.querySelectorAll('.hasflyout').forEach(function(w){
+    var btn=w.querySelector('.item'), fly=w.querySelector('.flyout'); if(!btn||!fly)return;
+    var t=null;
+    btn.addEventListener('mouseenter',function(){clearTimeout(t);place(fly,btn,'right');});
+    btn.addEventListener('mouseleave',function(){t=setTimeout(function(){fly.style.display='none';},150);});
+    fly.addEventListener('mouseenter',function(){clearTimeout(t);});
+    fly.addEventListener('mouseleave',function(){fly.style.display='none';});
+  });
+  document.querySelectorAll('.infotip').forEach(function(w){
+    var tip=w.querySelector('.tip'); if(!tip)return;
+    function show(){place(tip,w,'down');} function hide(){tip.style.display='none';}
+    w.addEventListener('mouseenter',show); w.addEventListener('mouseleave',hide);
+    w.addEventListener('focusin',show); w.addEventListener('focusout',hide);
+  });
+  // クリック式（ドロップダウン）
+  (function(){
+    var btn=document.getElementById('ddBtn'), dd=document.getElementById('dd'); if(!btn)return;
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      if(dd.style.display==='block'){dd.style.display='none';return;}
+      place(dd,btn,'down');
+    });
+    document.addEventListener('click',function(e){ if(!dd.contains(e.target)&&e.target!==btn) dd.style.display='none'; });
+  })();
+
+  /* 折りたたみ：クラス切替（スライドはCSSのtransitionが担当） */
+  document.querySelectorAll('.acc .achd').forEach(function(h){
+    h.addEventListener('click',function(){ h.closest('.acc').classList.toggle('open'); });
+  });
+
+  /* ダイアログ */
+  var scrim=document.getElementById('scrim');
+  document.getElementById('openModal').addEventListener('click',function(){scrim.classList.add('open');});
+  function closeM(){scrim.classList.remove('open');}
+  document.getElementById('cancelModal').addEventListener('click',closeM);
+  document.getElementById('okModal').addEventListener('click',closeM);
+  scrim.addEventListener('click',function(e){if(e.target===scrim)closeM();});
+</script>
+</body>
+</html>
