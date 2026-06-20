@@ -29,7 +29,7 @@ fi
 TARGETS="$@"
 [ -z "$TARGETS" ] && TARGETS="."
 
-FILES=$(find $TARGETS -type f \( -name '*.css' -o -name '*.html' -o -name '*.js' \) \
+FILES=$(find $TARGETS -type f \( -name '*.css' -o -name '*.html' -o -name '*.js' -o -name '*.tsx' -o -name '*.ts' \) \
   -not -path '*/node_modules/*' \
   -not -path '*/.git/*' \
   -not -path '*/.next/*' \
