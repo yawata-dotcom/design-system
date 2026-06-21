@@ -7,6 +7,9 @@ on:
 jobs:
   colors:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
     steps:
       - uses: actions/checkout@v4
       - name: 色チェック（公式17色のみ）
@@ -15,3 +18,8 @@ jobs:
         run: sh tools/check-icons.sh .
       - name: フォントチェック（共通フォントのみ・細く見せる設定禁止）
         run: sh tools/check-font.sh .
+      - name: 重なりチェック（他の開いているPRと同じファイルを触っていないか）
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: sh tools/check-overlap.sh ${{ github.event.pull_request.number }}
