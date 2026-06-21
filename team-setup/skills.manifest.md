@@ -18,10 +18,32 @@
 | `chart-visualization` | グラフ・データ可視化 | 公開スキル |
 | `find-skills` | 必要なスキルを探して入れる（入口） | 公開スキル |
 
-## 導入の考え方
-1. まず `find-skills` を入れる（これがあれば他を探して導入できる）。
-2. 上の表のスキルを `~/.claude/skills/<名前>/` に置く（各スキルは自己完結フォルダ）。
-3. 導入後、Claude Code を開けば自動で認識されます。
+## 導入のしかた（1コマンド・推奨）
+正確な出所は `skills-lock.json`（11スキルの GitHub 出所＋ハッシュを記録）。これを使って公式の
+Skills CLI でまとめて導入します。**Node.js（npx）が必要**です。
+
+```sh
+sh team-setup/install-skills.sh            # 全部まとめて導入
+sh team-setup/install-skills.sh --dry-run  # 実行されるコマンドを表示するだけ
+```
+
+中身は `npx skills add <出所>@<名前> -g -y`（-g=ユーザー全体・-y=確認省略）を11回回すだけです。
+
+### 出所（skills-lock.json より・検証済み）
+| スキル | 出所(GitHub) |
+|---|---|
+| frontend-design / brand-guidelines | `anthropics/skills` |
+| web-design-guidelines | `vercel-labs/agent-skills` |
+| find-skills | `vercel-labs/skills` |
+| accessibility / performance | `addyosmani/web-quality-skills` |
+| fixing-accessibility | `ibelick/ui-skills` |
+| design-tokens | `julianoczkowski/designer-skills` |
+| chart-visualization | `antvis/chart-visualization-skills` |
+| kpi-dashboard-design | `wshobson/agents` |
+| ui-ux-pro-max | `nextlevelbuilder/ui-ux-pro-max-skill` |
+
+### 手動で入れたい場合
+`find-skills` を入れる → `npx skills find <キーワード>` で探す → `~/.claude/skills/<名前>/` に置く。
 
 > 注意：ここに無いスキル・外部の素性不明なスキルは使わない（情報漏えい・品質ブレ防止）。
 > 標準を増やす判断は社長のみ＝この manifest を PR で更新してから使う。
