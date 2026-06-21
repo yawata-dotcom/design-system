@@ -1,0 +1,30 @@
+{
+  "name": "@yawata-dotcom/design-system",
+  "version": "0.1.0",
+  "description": "全社共通デザインシステム（正典シェル・カラートークン・共有React部品）。各製品はこれを使うだけ。変更は社長のみ。",
+  "private": false,
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yawata-dotcom/design-system.git"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    "./AppShell": "./components/AppShell.tsx",
+    "./shell.css": "./shell.css",
+    "./tokens.css": "./tokens.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "components",
+    "shell.css",
+    "tokens.css",
+    "icons"
+  ],
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  }
+}
