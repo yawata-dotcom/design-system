@@ -11,3 +11,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: 色チェック（公式17色のみ）
         run: sh tools/check-colors.sh .
+      - name: アイコンチェック（Material のみ・RULEBOOK §6）
+        run: sh tools/check-icons.sh .

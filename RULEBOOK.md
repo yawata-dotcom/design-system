@@ -34,6 +34,7 @@
 - **見本帳に無いアイコンが必要なときは、勝手に足さず社長に確認**（§9と同じ運用。社長が見本帳へ追加 → 配布）。
 - 実体ファイルは `icons/<名前>.svg`（色は親要素の `color:var(--token)` を継ぐ＝`fill="currentColor"`）。Reactは `<MaterialIcon IconComponent={名前} label="…" />`（`@freee_jp/vibes` + `react-icons/md`）。
 - 同じ記号＝同じ意味（チェック＝完了 等）。勝手に別アイコンで同概念を表さない。
+- **自動チェック（2026-06-21〜）**：CI（design-check）の `tools/check-icons.sh` で、Material以外（他react-iconsセット・lucide/heroicons/fontawesome等のライブラリ・Lucide系スプライトの痕跡）を検出して赤で止める。全製品に展開済み。※絵文字や手書きSVGの真贋は機械判定が難しいため、この自動チェック＋見本帳＋レビューで守る。
 
 ## 7. ログイン・権限
 - **同じ社員が複数製品を使う**前提。将来は**共通ログイン（Googleサインイン）＋権限で製品を出し分け**。各製品はこれに合わせて作る。
