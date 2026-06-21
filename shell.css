@@ -1,0 +1,79 @@
+/* =========================================================
+   正典シェル（共通シェル）shell.css ／全プロダクト共通
+   ---------------------------------------------------------
+   ・サイドメニュー＋ヘッダー＋外殻レイアウトの「唯一の正」。
+   ・色は tokens.css の var(--token) を継ぐ（このファイル単体では tokens.css と併読）。
+   ・各製品はこの shell.css を使い、シェルのクラス(.app/.side/.topbar/.brand/.item 等)を
+     自前で再定義しない（再定義は CI: tools/check-shell.sh で検出して止める／導入後）。
+   ・マークアップ（クラス名・入れ子）は見本帳 gallery.html「正典シェル」節が正。
+   ・変更できるのは社長のみ。各製品は「使うだけ」。
+   ・出典＝esecurity app のシェルCSSを正典として抽出（2026-06-21）。
+   ========================================================= */
+
+/* 外殻 */
+.app{display:flex;min-height:100vh;}
+.main{flex:1;min-width:0;}
+.content{padding:22px 26px;max-width:1200px;}
+
+/* サイドバー */
+.side{width:226px;background:var(--card);border-right:1px solid var(--line);flex-shrink:0;
+  position:sticky;top:0;height:100vh;overflow-y:auto;}
+.side .brand{display:flex;align-items:center;justify-content:flex-start;gap:6px;padding:14px 16px;}
+.side .brand .bird{color:var(--teal);display:flex;}
+.side .brand .bird .ic{width:20px;height:20px;}
+.side .brand b{font-size:16px;}
+.side .brand span{font-size:14px;color:var(--gray);}
+.side .seclabel{font-size:11px;color:var(--gray);padding:14px 18px 4px;}
+.side button.item{display:flex;align-items:center;gap:10px;width:calc(100% - 10px);
+  padding:9px 18px;color:var(--text);font-size:13.5px;border:none;background:none;
+  text-align:left;cursor:pointer;border-radius:0 18px 18px 0;margin-right:10px;
+  font-family:inherit;}
+.side button.item .ic{width:1.32em;height:1.32em;color:var(--fblue);}
+.side button.item:hover{background:var(--topbar);}
+.side button.item:focus-visible{outline:2px solid var(--fblue);outline-offset:-2px;}
+.side button.item.active{background:var(--activebg);color:var(--fblue);font-weight:700;}
+.side button.item.soon{opacity:.45;cursor:not-allowed;}
+.side button.item.soon .badge{font-size:9px;background:var(--bg);color:var(--gray);
+  padding:1px 5px;border-radius:8px;margin-left:auto;}
+
+/* 事業ランチャー（左上のアプリ一覧） */
+.side .brand .launchwrap{position:relative;display:flex;align-items:center;margin-left:auto;}
+.applauncher{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:7px;
+  border:none;background:none;cursor:pointer;padding:0;}
+.applauncher:hover{background:var(--topbar);}
+.launchpanel{position:fixed;display:none;z-index:1300;padding-left:7px;}
+.launchwrap:hover .launchpanel{display:block;}
+.launchpanel .lpcard{width:214px;background:var(--card);border:1px solid var(--line);border-radius:10px;
+  box-shadow:0 12px 30px rgba(20,40,90,.17);padding:5px;}
+.lph{font-size:10.5px;font-weight:700;color:var(--gray);padding:7px 12px 6px;}
+.lpi{display:flex;align-items:center;padding:9px 12px 9px 16px;border-radius:8px;text-decoration:none;color:var(--text);font-size:13px;cursor:pointer;position:relative;}
+.lpi::before{content:"";position:absolute;left:7px;top:50%;transform:translateY(-50%);width:3px;height:15px;border-radius:2px;background:var(--activebg);}
+.lpi:hover{background:var(--topbar);}
+.lpi.active{font-weight:700;}
+.lpi.active::before{background:var(--fblue);}
+.lpi.soon{color:var(--gray);}
+.lpi.soon::before{background:var(--activebg);}
+.lpnow{margin-left:auto;font-size:9px;font-weight:800;color:var(--card);background:var(--fblue);border-radius:5px;padding:1px 6px;}
+.lpi.soon .lpsoon{margin-left:auto;font-size:9px;font-weight:700;color:var(--gray);}
+.lpdiv{height:1px;background:var(--line);margin:5px 4px;}
+.lpnote{font-size:10px;color:var(--gray);padding:4px 12px 5px;line-height:1.45;}
+
+/* サイドメニューのホバー展開（フライアウト） */
+.side .hasflyout{position:relative;}
+.side .hasflyout .chev{margin-left:auto;color:var(--line);display:inline-flex;}
+.side .hasflyout .chev .ic{width:15px;height:15px;}
+.side .hasflyout.open > button.item{background:var(--activebg);color:var(--fblue);font-weight:700;}
+.side .hasflyout.open > button.item .chev{color:var(--fblue);}
+.flyout{position:fixed;left:0;top:0;min-width:240px;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 36px rgba(0,0,0,.18);padding:8px;display:none;z-index:1000;}
+.flyout a{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:8px;font-size:13.5px;color:var(--text);text-decoration:none;cursor:pointer;}
+.flyout a::before{content:"";width:3px;height:16px;border-radius:2px;background:var(--fblue);flex-shrink:0;}
+.flyout a:hover{background:var(--topbar);color:var(--fblue);}
+
+/* ヘッダー（トップバー） */
+.topbar{background:var(--topbar);border-bottom:1px solid var(--line);
+  padding:9px 22px;display:flex;align-items:center;justify-content:flex-end;gap:16px;
+  font-size:12.5px;color:var(--text);position:sticky;top:0;z-index:5;}
+.topbar span{display:inline-flex;align-items:center;gap:5px;}
+.topbar .ic{color:var(--gray);}
+.topbar .sync{margin-right:auto;}
+.topbar .plan{border:1px solid var(--activebg);color:var(--fblue);border-radius:14px;padding:2px 12px;font-weight:600;}
