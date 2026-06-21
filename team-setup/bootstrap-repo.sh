@@ -31,7 +31,7 @@ echo "==========================================================="
 
 # 1) 番人スクリプトを全種コピー
 mkdir -p "$TARGET/tools"
-for s in check-colors.sh check-icons.sh check-font.sh check-shell.sh check-header.sh check-vendored.sh check-appshell.sh; do
+for s in check-colors.sh check-icons.sh check-font.sh check-shell.sh check-header.sh check-vendored.sh check-appshell.sh check-overlap.sh; do
   if [ -f "$DSROOT/tools/$s" ]; then
     cp "$DSROOT/tools/$s" "$TARGET/tools/$s"; chmod +x "$TARGET/tools/$s"
     echo "  配備: tools/$s"
@@ -55,6 +55,9 @@ on:
 jobs:
   colors:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
     steps:
       - uses: actions/checkout@v4
       # --- 静的(HTML/CSS)なら例: app  ／ Reactなら例: app/src に変える ---
@@ -64,6 +67,11 @@ jobs:
         run: sh tools/check-icons.sh app
       - name: フォントチェック（共通フォントのみ・細く見せる設定禁止）
         run: sh tools/check-font.sh app
+      - name: 重なりチェック（他の開いているPRと同じファイルを触っていないか）
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: sh tools/check-overlap.sh ${{ github.event.pull_request.number }}
       # --- 共通シェル（サイドメニュー/ヘッダー）を使う製品は以下も有効化 ---
       # - name: シェルチェック
       #   run: sh tools/check-shell.sh app
