@@ -13,3 +13,5 @@ jobs:
         run: sh tools/check-colors.sh .
       - name: アイコンチェック（Material のみ・RULEBOOK §6）
         run: sh tools/check-icons.sh .
+      - name: フォントチェック（共通フォントのみ・細く見せる設定禁止）
+        run: sh tools/check-font.sh .
