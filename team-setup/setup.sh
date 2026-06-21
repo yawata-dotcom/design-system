@@ -57,11 +57,13 @@ sed 's/^/    /' "$SRC/settings.recommended.json"
 echo "  → 既存の ~/.claude/settings.json に、上の permissions.deny を取り込んでください。"
 echo "    （自動では書き換えません。設定が壊れないよう手で反映してください）"
 
-# 4) スキルの導入案内（ライセンス配慮で同梱なし）
+# 4) スキルの導入（1コマンド・公式Skills CLI経由／ライセンス配慮で同梱なし）
 echo ""
 echo "[4/4] 標準スキルの導入"
-echo "  一覧と入手元: $SRC/skills.manifest.md"
-echo "  → まず find-skills を入れ、manifest の11スキルを ~/.claude/skills/ に導入してください。"
+echo "  一覧と入手元: $SRC/skills.manifest.md（正確な出所は skills-lock.json）"
+echo "  ▼ 1コマンドで全部入れる（Node.js が必要）："
+echo "      sh team-setup/install-skills.sh"
+echo "    先に中身だけ確認する場合： sh team-setup/install-skills.sh --dry-run"
 
 echo ""
 echo "==========================================================="
