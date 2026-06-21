@@ -9,7 +9,7 @@
 | `esecurity-system`（交通誘導警備） | React+mock | ✅ | ✅ 共通シェル採用済 | ✅ |
 | `esupport-jinzai`（人材事業） | 静的(app) | ✅ | ✅ 共通シェル採用済 | ✅ |
 | `portal`（共通ポータル） | 静的 | ✅ | － ヘッダー無しの特殊画面（対象外） | ✅ |
-| `esupport-kensetsu`（建設） | React | ✅（Phase A） | ⏳ Phase B＝自前シェル→共通AppShell載せ替え後に番人追加 | ✅ |
+| `esupport-kensetsu`（建設） | React | ✅ | ✅ 共通シェル採用済（check-shell/appshell/vendored） | ✅ |
 
 凡例：✅=導入済 ／ ⏳=未（予定） ／ －=対象外（理由を併記）
 
