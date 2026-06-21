@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>正典シェル 実物デモ（shell.css）</title>
+<!-- 正典シェルは tokens.css（色）＋ shell.css（外殻/サイドバー/ヘッダー）だけで成立する。
+     これが「実物」。各製品はこの2つを読み、下のマークアップを置くだけでよい。 -->
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="shell.css">
+<style>
+  /* デモ最小限：本文の素・アイコンの大きさ（.ic はアイコンの作法＝各製品の theme 側。shell.css の責務ではない） */
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;font-family:-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;color:var(--text);background:var(--bg);}
+  .ic{width:1.15em;height:1.15em;fill:currentColor;stroke:none;flex-shrink:0;vertical-align:-0.18em;}
+  .appshell-content h1{font-size:18px;margin:0 0 6px;}
+  .appshell-content p{font-size:13px;color:var(--gray);margin:0;}
+</style>
+</head>
+<body>
+  <!-- ▼▼ ここからが「正典マークアップ」。これ以外の作り方をしない（CI: check-shell.sh で強制） ▼▼ -->
+  <div class="appshell">
+    <nav class="appshell-side" aria-label="メインメニュー">
+      <div class="appshell-brand">
+        <span>製品名</span>
+        <div class="appshell-launchwrap">
+          <button class="appshell-launcher" aria-label="事業を切り替え" title="事業を切り替え">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <circle cx="5" cy="5" r="2.1" fill="var(--red)"/><circle cx="12" cy="5" r="2.1" fill="var(--orange)"/><circle cx="19" cy="5" r="2.1" fill="var(--orange)"/>
+              <circle cx="5" cy="12" r="2.1" fill="var(--green)"/><circle cx="12" cy="12" r="2.1" fill="var(--teal)"/><circle cx="19" cy="12" r="2.1" fill="var(--fblue)"/>
+              <circle cx="5" cy="19" r="2.1" fill="var(--fblue)"/><circle cx="12" cy="19" r="2.1" fill="var(--fblue)"/><circle cx="19" cy="19" r="2.1" fill="var(--red)"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="appshell-seclabel">業務</div>
+      <button class="appshell-item active"><svg class="ic" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>ホーム</button>
+      <button class="appshell-item"><svg class="ic" viewBox="0 0 24 24"><path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>シフト管理</button>
+      <button class="appshell-item"><svg class="ic" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>発注管理</button>
+      <button class="appshell-item soon" disabled aria-disabled="true"><svg class="ic" viewBox="0 0 24 24"><path d="M12 12.75c1.63 0 3.07.39 4.24.9 1.08.48 1.76 1.56 1.76 2.73V18H6v-1.61c0-1.18.68-2.26 1.76-2.73 1.17-.52 2.61-.91 4.24-.91zM4 13c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm1.13 1.1c-.37-.06-.74-.1-1.13-.1-.99 0-1.93.21-2.78.58A2.01 2.01 0 000 16.43V18h4.5v-1.61c0-.83.23-1.61.63-2.29zM20 13c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm4 3.43c0-.81-.48-1.53-1.22-1.85A6.95 6.95 0 0020 14c-.39 0-.76.04-1.13.1.4.68.63 1.46.63 2.29V18H24v-1.57zM12 6c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z"/></svg>採算<span class="badge">近日</span></button>
+
+      <div class="appshell-seclabel">設定</div>
+      <button class="appshell-item"><svg class="ic" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.488.488 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>設定</button>
+    </nav>
+
+    <div class="appshell-main">
+      <div class="appshell-topbar">
+        <span class="sync"><svg class="ic" viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>株式会社○○</span>
+        <span>user@example.com</span>
+        <span class="plan">管理者</span>
+      </div>
+      <div class="appshell-content">
+        <h1>メイン領域</h1>
+        <p>各画面の中身（一覧・フォーム・ダッシュボード等）がここに入ります。</p>
+      </div>
+    </div>
+  </div>
+  <!-- ▲▲ 正典マークアップ ここまで ▲▲ -->
+</body>
+</html>

@@ -96,17 +96,9 @@
   table.tbl tbody tr:last-child td{border-bottom:none;}
   table.tbl tbody tr:hover{background:var(--topbar);}
 
-  /* ===== ② 画面の骨格（ナビ） ===== */
-  .shell{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;width:100%;min-height:230px;background:var(--card);}
-  .shell .side{width:180px;flex:none;background:var(--card);border-right:1px solid var(--line);padding:10px;display:flex;flex-direction:column;gap:2px;}
-  .shell .seclabel{font-size:10.5px;color:var(--gray);padding:8px 8px 2px;}
-  .shell .item{display:flex;align-items:center;gap:8px;border:none;background:none;color:var(--text);font:inherit;font-size:13px;font-weight:600;text-align:left;padding:8px 10px;border-radius:8px;cursor:pointer;width:100%;}
-  .shell .item:hover{background:var(--topbar);}
-  .shell .item.active{background:var(--activebg);color:var(--fblue);font-weight:700;}
-  .shell .item .chev{margin-left:auto;color:var(--gray);}
-  .shell .main{flex:1;display:flex;flex-direction:column;}
-  .shell .topbar{height:46px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:0 16px;font-size:12.5px;color:var(--gray);}
-  .shell .body{padding:16px;font-size:13px;color:var(--gray);}
+  /* ===== 正典シェル：実物は shell.css を読み込んだ iframe（shell-demo.html）で表示する =====
+     ＝見本帳自身が“本物の shell.css”で描く（再現コピーではない）。乖離が起きない。 */
+  .shellframe{width:100%;height:380px;border:1px solid var(--line);border-radius:10px;background:var(--card);display:block;}
 
   /* ===== ③ 重ねUI（§11：必ず最前面。bodyへ出す＋fixed＋z-index大） ===== */
   .hasflyout{position:relative;}
@@ -515,28 +507,35 @@
     </div>
   </section>
 
-  <!-- ナビ -->
-  <section>
-    <h2><span class="num">⑦</span>画面の骨格（サイドメニュー＋上バー）</h2>
-    <p class="hint">「設定」にマウスを乗せると、右にサブメニューが <b>最前面</b>で出ます（§11）。</p>
+  <!-- 正典シェル -->
+  <section id="sec-shell">
+    <h2><span class="num">⑦</span>正典シェル（外殻＋サイドメニュー＋ヘッダー） <span class="pill-rule">唯一の正</span></h2>
+    <p class="hint">下の実物は <code>tokens.css</code> ＋ <code>shell.css</code> <b>だけ</b>で描いています（<a href="shell-demo.html" target="_blank" rel="noopener">shell-demo.html</a> を読込）。再現コピーではなく<b>本物の shell.css</b>。全製品このシェルに揃える。</p>
     <div class="demo col">
-      <div class="shell">
-        <div class="side">
-          <div class="seclabel">業務</div>
-          <button class="item active">ホーム</button>
-          <button class="item">一覧</button>
-          <div class="seclabel">設定</div>
-          <div class="hasflyout">
-            <button class="item">マスタ <span class="chev">›</span></button>
-            <div class="flyout"><a>紹介会社</a><a>契約先</a><a>単価</a></div>
-          </div>
-        </div>
-        <div class="main">
-          <div class="topbar">最終同期 2026-06-15 ／ 株式会社Esupport</div>
-          <div class="body">メイン領域。</div>
-        </div>
-      </div>
+      <iframe class="shellframe" src="shell-demo.html" title="正典シェルの実物（shell.css）" loading="lazy"></iframe>
     </div>
+    <p class="hint"><b>使い方：</b><code>tokens.css</code> と <code>shell.css</code> を読み込み、下のマークアップを置くだけ。クラスは <code>appshell</code> 名前空間で<b>予約</b>＝他用途に流用しない・自前で再定義しない（CIの番人 <code>check-shell.sh</code> が止めます）。変更できるのは社長のみ。</p>
+    <pre class="code">&lt;link rel="stylesheet" href="<span class="t">tokens.css</span>"&gt;
+&lt;link rel="stylesheet" href="<span class="t">shell.css</span>"&gt;
+
+&lt;div class="<span class="t">appshell</span>"&gt;
+  &lt;nav class="<span class="t">appshell-side</span>" aria-label="メインメニュー"&gt;
+    &lt;div class="<span class="t">appshell-brand</span>"&gt;&lt;span&gt;製品名&lt;/span&gt;
+      &lt;div class="<span class="t">appshell-launchwrap</span>"&gt;&lt;button class="<span class="t">appshell-launcher</span>"&gt;…&lt;/button&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="<span class="t">appshell-seclabel</span>"&gt;業務&lt;/div&gt;
+    &lt;button class="<span class="t">appshell-item active</span>"&gt;&lt;svg class="ic"&gt;…&lt;/svg&gt;ホーム&lt;/button&gt;
+    &lt;button class="<span class="t">appshell-item</span>"&gt;&lt;svg class="ic"&gt;…&lt;/svg&gt;シフト管理&lt;/button&gt;
+    &lt;button class="<span class="t">appshell-item soon</span>" disabled&gt;採算&lt;span class="badge"&gt;近日&lt;/span&gt;&lt;/button&gt;
+    &lt;!-- ホバー展開する子メニューは appshell-hasflyout / appshell-flyout（shell.css 参照） --&gt;
+  &lt;/nav&gt;
+  &lt;div class="<span class="t">appshell-main</span>"&gt;
+    &lt;div class="<span class="t">appshell-topbar</span>"&gt;
+      &lt;span class="sync"&gt;株式会社○○&lt;/span&gt;&lt;span&gt;user@example.com&lt;/span&gt;&lt;span class="plan"&gt;管理者&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="<span class="t">appshell-content</span>"&gt; メイン領域 &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
   </section>
 
   <!-- 重ねUI -->
