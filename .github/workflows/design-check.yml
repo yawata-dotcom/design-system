@@ -16,6 +16,8 @@ jobs:
         run: sh tools/check-colors.sh .
       - name: アイコンチェック（Material のみ・RULEBOOK §6）
         run: sh tools/check-icons.sh .
+      - name: アイコン色チェック（fill:currentColor を継ぐ・MaterialIcon禁止・RULEBOOK §6）
+        run: sh tools/check-icon-color.sh .
       - name: フォントチェック（共通フォントのみ・細く見せる設定禁止）
         run: sh tools/check-font.sh .
       - name: 重なりチェック（他の開いているPRと同じファイルを触っていないか）

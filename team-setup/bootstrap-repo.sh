@@ -31,7 +31,7 @@ echo "==========================================================="
 
 # 1) 番人スクリプトを全種コピー
 mkdir -p "$TARGET/tools"
-for s in check-colors.sh check-icons.sh check-font.sh check-shell.sh check-header.sh check-vendored.sh check-appshell.sh check-overlap.sh; do
+for s in check-colors.sh check-icons.sh check-icon-color.sh check-font.sh check-shell.sh check-header.sh check-vendored.sh check-appshell.sh check-overlap.sh; do
   if [ -f "$DSROOT/tools/$s" ]; then
     cp "$DSROOT/tools/$s" "$TARGET/tools/$s"; chmod +x "$TARGET/tools/$s"
     echo "  配備: tools/$s"
@@ -65,6 +65,8 @@ jobs:
         run: sh tools/check-colors.sh app
       - name: アイコンチェック（Material のみ）
         run: sh tools/check-icons.sh app
+      - name: アイコン色チェック（fill:currentColor を継ぐ・MaterialIcon禁止）
+        run: sh tools/check-icon-color.sh app
       - name: フォントチェック（共通フォントのみ・細く見せる設定禁止）
         run: sh tools/check-font.sh app
       - name: 重なりチェック（他の開いているPRと同じファイルを触っていないか）
