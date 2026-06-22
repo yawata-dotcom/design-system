@@ -5,7 +5,7 @@
 
 | リポ | 種別 | 色/アイコン/フォント番人 | アイコン色番人（静的／実測Playwright） | サイドメニュー/ヘッダー（共通シェル＋骨格一致＋ヘッダー番人） | ブランチ保護 |
 |---|---|---|---|---|---|
-| `design-system` | 公開・本家 | ✅（自リポも検査） | ✅ 静的（正本）／実測テンプレ | 正本（shell.css等の出どころ） | ✅ |
+| `design-system` | 公開・本家 | ✅（自リポも検査） | ✅ 静的（正本）／✅ 実測（正典 shell-demo.html を自己検査） | 正本（shell.css等の出どころ） | ✅ |
 | `esecurity-system`（交通誘導警備） | React+mock | ✅ | ✅ 静的／✅ 実測 | ✅ 共通シェル採用済 | ✅ |
 | `esupport-jinzai`（人材事業） | 静的(app) | ✅ | ✅ 静的／✅ 実測 | ✅ 共通シェル採用済 | ✅ |
 | `portal`（共通ポータル） | 静的 | ✅ | ✅ 静的／－ 実測（選択メニュー/ヘッダー無し＝対象外） | － ヘッダー無しの特殊画面（対象外） | ✅ |
@@ -28,14 +28,15 @@
 3. design-check.yml の検査対象パスを、その製品の実ファイルに合わせる（静的 or React）。
 4. 共通シェル（サイドメニュー/ヘッダー）を使う製品は、shell.css を本家からコピー（vendored）し、
    `check-shell`/`check-header`/`check-vendored`（Reactは `check-appshell`）も有効化する。
-5. **ブランチ保護を設定**（PR必須＋必須チェック`colors`＋`enforce_admins=true`）＝下記コマンド。
+   さらに**実測番人**：design-check.yml に `runtime` ジョブを足す（静的は `file://…/index.html`、Next は `npm ci && build` → `start` → `node tools/check-icon-color-runtime.mjs http://localhost:3000`）。ヘッダー/選択メニューが無い特殊画面（例：portal）は実測対象外。
+5. **ブランチ保護を設定**（PR必須＋必須チェック`colors`、実測番人を入れた製品は`runtime`も追加＋`enforce_admins=true`）＝下記コマンド。
 6. CLAUDE.md に共通ルール（team-setup/CLAUDE.shared）への参照を追記。
 7. **この台帳に1行追加**。
 
 ### ブランチ保護コマンド（雛形）
 ```sh
 gh api -X PUT repos/yawata-dotcom/<リポ>/branches/main/protection --input - <<'JSON'
-{ "required_status_checks": { "strict": false, "contexts": ["colors"] },
+{ "required_status_checks": { "strict": false, "contexts": ["colors", "runtime"] },
   "enforce_admins": true,
   "required_pull_request_reviews": { "required_approving_review_count": 0 },
   "restrictions": null }
