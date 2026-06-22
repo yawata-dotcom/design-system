@@ -37,6 +37,11 @@ for s in check-colors.sh check-icons.sh check-icon-color.sh check-font.sh check-
     echo "  配備: tools/$s"
   fi
 done
+# 実測番人（Playwright・AppShellを持つ製品向け。CIで runtime ジョブとして実行）
+if [ -f "$DSROOT/tools/check-icon-color-runtime.mjs" ]; then
+  cp "$DSROOT/tools/check-icon-color-runtime.mjs" "$TARGET/tools/check-icon-color-runtime.mjs"
+  echo "  配備: tools/check-icon-color-runtime.mjs（実測番人。design-check.yml に runtime ジョブを足して有効化）"
+fi
 
 # 2) CI ひな形（無ければ）
 mkdir -p "$TARGET/.github/workflows"

@@ -25,3 +25,22 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: sh tools/check-overlap.sh ${{ github.event.pull_request.number }}
+
+  # 実測アイコン色番人（正本の自己検査）：正典 shell-demo.html を実測し
+  # 「選択中=青／ヘッダー=グレー」を担保（各製品が写して使うテンプレ）。
+  runtime:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Playwright 導入（chromium のみ）
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm i playwright >/dev/null 2>&1
+          npx playwright install --with-deps chromium
+      - name: 実測アイコン色チェック（正典 shell-demo.html）
+        run: node tools/check-icon-color-runtime.mjs "file://$PWD/shell-demo.html"
