@@ -43,13 +43,31 @@ for f in $FILES; do
 $(printf '%s\n' "$block" | grep -nE '<input|<textarea|class="[^"]*lead-toggle'
 printf '%s\n' "$block" | grep -n '<select' | grep -v 'rolesw')
 EOF
+
+  # ── 必須5点の存在チェック（モックとアプリでヘッダーがズレる事故の防止）──
+  # 正典5点＝最終同期(.sync) / 期間 / 会社名 / 役割セレクタ(.rolesw>select) / ヘルプ。
+  # 確実に検出できる印（.sync・.rolesw+select・spanが5個以上）で「欠け」を止める。
+  # ※ React実装は構造を共有 <AppShell> が固定（topbar の必須propsが型＝ビルドで強制）＋実測番人で担保。
+  #   この静的チェックは主に静的HTML（人材 app/ 等）のヘッダー欠落を捕らえる。
+  miss=""
+  printf '%s' "$block" | grep -q 'class="[^"]*\bsync\b' || miss="$miss 最終同期(.sync)"
+  { printf '%s' "$block" | grep -q 'class="[^"]*\brolesw\b' && printf '%s' "$block" | grep -q '<select'; } \
+    || miss="$miss 役割セレクタ(.rolesw>select)"
+  spans=$(printf '%s' "$block" | grep -o '<span' | wc -l | tr -d ' ')
+  [ "${spans:-0}" -ge 5 ] || miss="$miss 5点未満(spanが${spans}個)"
+  if [ -n "$miss" ]; then
+    echo "NG: $f  →  ヘッダーに必須要素が欠けています：$miss"
+    echo "    正典5点＝最終同期(.sync)／期間／会社名／役割セレクタ(.rolesw>select)／ヘルプ。共有 <AppShell> の5点セットに合わせてください。"
+    viol=$((viol + 1))
+  fi
 done
 
 if [ "$viol" -gt 0 ]; then
   echo "----------------------------------------------"
-  echo "ヘッダー（共通上バー）に製品独自の操作が $viol 件あります。"
-  echo "ヘッダーは全製品共通の固定仕様です。セレクタ・トグル・絞り込み等の操作は本文（フィルタ帯）へ置いてください。"
+  echo "ヘッダー（共通上バー）の違反が $viol 件あります。"
+  echo "ヘッダーは全製品共通の固定仕様（正典5点＝最終同期/期間/会社/役割セレクタ/ヘルプ）です。"
+  echo "操作系の追加は本文へ／必須5点の欠けは共有 <AppShell> の5点セットに合わせてください。"
   exit 1
 fi
-echo "OK: ヘッダー違反なし（共通上バーに製品独自の操作は入っていない）"
+echo "OK: ヘッダー違反なし（共通上バーは正典5点・製品独自の操作なし）"
 exit 0

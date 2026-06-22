@@ -1,6 +1,6 @@
 {
   "name": "@yawata-dotcom/design-system",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "全社共通デザインシステム（正典シェル・カラートークン・共有React部品）。各製品はこれを使うだけ。変更は社長のみ。",
   "private": false,
   "license": "UNLICENSED",

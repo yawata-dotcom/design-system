@@ -1,10 +1,11 @@
 // ============================================================
-// アイコン色チェック（実測版・ヘッドレスブラウザ）：RULEBOOK §6
-//   実際に描画された画面の computed color を測り、
+// 実測UIチェック（実測版・ヘッドレスブラウザ）：RULEBOOK §6・ヘッダー固定仕様
+//   実際に描画された画面を測り、次を照合する：
 //     ・選択中メニューのアイコン色 == --fblue（青）
 //     ・ヘッダーのアイコン色       == --gray（グレー）
-//   を照合する。静的番人 check-icon-color.sh が捕らえきれない
-//   「実際の表示色のズレ」（MaterialIcon等で currentColor が継がれない等）を最終的に止める。
+//     ・ヘッダー（共通上バー）に正典5点が実在＝最終同期(.sync)/期間/会社/役割セレクタ(.rolesw>select)/ヘルプ
+//   静的番人が捕らえきれない「実際の表示ズレ」（MaterialIcon等で色が継がれない／
+//   モックとアプリでヘッダーが食い違う 等）を最終的に止める。
 //   正本＝ design-system/tools/check-icon-color-runtime.mjs（更新時はそちらに合わせる）。
 //
 //   使い方:  node tools/check-icon-color-runtime.mjs <URL>
@@ -67,6 +68,34 @@ try {
       console.log(`OK: ${ex.name} = ${ex.token} (${got})`);
     }
   }
+
+  // ── ヘッダー（共通上バー）の正典5点が“実在”するか（モックとアプリのズレ防止）──
+  //   最終同期(.sync) / 期間 / 会社名 / 役割セレクタ(.rolesw>select) / ヘルプ。
+  //   共有 <AppShell> が5点を固定描画していれば必ず通る。React実装の最終担保。
+  const header = await page.evaluate(() => {
+    const bar = document.querySelector('.appshell-topbar');
+    if (!bar) return { exists: false };
+    return {
+      exists: true,
+      sync: !!bar.querySelector('.sync'),
+      role: !!bar.querySelector('.rolesw select'),
+      icons: bar.querySelectorAll('.ic').length,
+    };
+  });
+  if (!header.exists) {
+    console.log('… appshell-topbar が無い画面（ヘッダー5点チェックは対象外）');
+  } else {
+    const need = [];
+    if (!header.sync) need.push('最終同期(.sync)');
+    if (!header.role) need.push('役割セレクタ(.rolesw>select)');
+    if (header.icons < 5) need.push(`5点未満(ヘッダーのアイコン${header.icons}個)`);
+    if (need.length) {
+      console.error(`NG: ヘッダー正典5点が欠けています：${need.join(' ')}（最終同期/期間/会社/役割セレクタ/ヘルプ）`);
+      fail++;
+    } else {
+      console.log(`OK: ヘッダー正典5点 実在（.sync/期間/会社/.rolesw/ヘルプ・アイコン${header.icons}個）`);
+    }
+  }
 } catch (e) {
   console.error('NG: ページ読込/描画に失敗:', e.message);
   fail++;
@@ -75,8 +104,9 @@ await browser.close();
 
 if (fail > 0) {
   console.error('----------------------------------------------');
-  console.error(`実測アイコン色のちがいが ${fail} 件あります（RULEBOOK §6）。`);
-  console.error('選択中メニュー=--fblue／ヘッダー=--gray を fill:currentColor で継いでください（MaterialIcon は使わない）。');
+  console.error(`実測UIのちがいが ${fail} 件あります（RULEBOOK §6・ヘッダー固定仕様）。`);
+  console.error('・色：選択中メニュー=--fblue／ヘッダー=--gray を fill:currentColor で継ぐ（MaterialIcon は使わない）。');
+  console.error('・ヘッダー：正典5点（最終同期/期間/会社/役割セレクタ/ヘルプ）を共有 <AppShell> で揃える。');
   process.exit(1);
 }
-console.log('OK: 実測アイコン色 合格（選択中=青／ヘッダー=グレー）');
+console.log('OK: 実測UI 合格（アイコン色＝選択中青/ヘッダーグレー・ヘッダー正典5点 実在）');
