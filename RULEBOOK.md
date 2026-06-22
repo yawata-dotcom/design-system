@@ -32,9 +32,13 @@
 ## 6. アイコン（freee公式採用＝Material Design Icons のみ・これ以外禁止）
 - **使ってよいアイコンは、見本帳「印 アイコン」に載っている freee公式採用の Material Design Icons（react-icons の `md`）だけ。** 絵文字・他のアイコンセット（FontAwesome 等）・自作SVG・画像（png/jpg）アイコンは**禁止**。freee vibes はこれ以外のアイコンを認めていない。
 - **見本帳に無いアイコンが必要なときは、勝手に足さず社長に確認**（§9と同じ運用。社長が見本帳へ追加 → 配布）。
-- 実体ファイルは `icons/<名前>.svg`（色は親要素の `color:var(--token)` を継ぐ＝`fill="currentColor"`）。Reactは `<MaterialIcon IconComponent={名前} label="…" />`（`@freee_jp/vibes` + `react-icons/md`）。
+- 実体ファイルは `icons/<名前>.svg`（色は親要素の `color:var(--token)` を継ぐ＝`fill="currentColor"`）。
+- **色の継ぎ方（重要・塗りを固定しない）**：アイコンは **`fill:currentColor`** で親の文字色（＝トークン色）を継ぐ。これで「選択中メニュー＝青(`--fblue`)／ヘッダー＝グレー(`--gray`)」が自動でそろう。
+  - **Reactは `react-icons/md` を直接 `<Icon className="ic">`（またはインラインSVG）で描く。** 基底に `.ic{ fill:currentColor; stroke:none; … }` を置く（正典 `shell-demo.html` と同一）。
+  - **`@freee_jp/vibes` の `MaterialIcon` は使わない。** これは塗りを `#323232` に固定して `currentColor` を継がず、選択中／ヘッダーの色が濃グレーにズレる（2026-06-22 建設で実際に発生）。`#323232` も `md` も“公式”のため、色番人・アイコン番人を素通りしてしまうので、人の目でなく機械で止める。
+  - アイコンSVGの塗りは `fill="currentColor"` か `fill="var(--token)"`。**直書きhex（`fill="#…"`）は禁止**（ランチャー等のトークン色も `var(--token)` で）。
 - 同じ記号＝同じ意味（チェック＝完了 等）。勝手に別アイコンで同概念を表さない。
-- **自動チェック（2026-06-21〜）**：CI（design-check）の `tools/check-icons.sh` で、Material以外（他react-iconsセット・lucide/heroicons/fontawesome等のライブラリ・Lucide系スプライトの痕跡）を検出して赤で止める。全製品に展開済み。※絵文字や手書きSVGの真贋は機械判定が難しいため、この自動チェック＋見本帳＋レビューで守る。
+- **自動チェック**：CI（design-check）で2本走る。`tools/check-icons.sh`（2026-06-21〜）＝Material以外（他react-iconsセット・lucide/heroicons/fontawesome等・Lucide系スプライト痕跡）を検出。`tools/check-icon-color.sh`（2026-06-22〜）＝`MaterialIcon`の使用・`.ic`が`fill:currentColor`を継がない/固定塗り・アイコンSVGの直書きhex を検出。さらに**実測番人（Playwright）**で「選択中=青／ヘッダー=グレー」を実画面のcomputed colorで照合（AppShellを持つ製品）。※絵文字や手書きSVGの真贋は機械判定が難しいため、これら自動チェック＋見本帳＋レビューで守る。
 
 ## 7. ログイン・権限
 - **同じ社員が複数製品を使う**前提。将来は**共通ログイン（Googleサインイン）＋権限で製品を出し分け**。各製品はこれに合わせて作る。
@@ -68,3 +72,4 @@
 - 2026-06-15 §11 を補強：対象に「アプリ/事業切替ランチャー」を明記。`position:sticky` のサイドバーも“重なりの入れ物”を作り `position:fixed` を閉じ込めると追記（esecurity の左上ランチャーが本文の後ろに隠れる不具合→body 直下へポータル化して解決）。
 - 2026-06-15 §9 を補強：「**UIは必ず見本帳の標準部品から作る／無い部品は勝手に作らず社長に確認**」を明文化（見本帳URL併記・人もAIも全員対象・各製品CLAUDE.mdにも明記して徹底）。社長指示。
 - 2026-06-19 §6 を確定：**アイコンは freee公式採用の Material Design Icons のみ・これ以外（絵文字/他セット/自作SVG/画像）禁止**。見本帳に「印 アイコン」セクション（代表128個・検索＋コピー）と実体ファイル `icons/*.svg` を追加。社長指示。
+- 2026-06-22 §6 を補強：**アイコンは `fill:currentColor` で文字色（トークン）を継ぐ。塗りを固定する `MaterialIcon` は使わない**（react-icons/md を `<Icon className="ic">` で直接描画）。建設で「選択中=青のはずが濃グレー #323232」事故が発生し、色番人・アイコン番人を素通りしたため、静的番人 `tools/check-icon-color.sh` ＋ 実測番人（Playwright）を全製品に追加。社長指示。
