@@ -16,6 +16,11 @@
 > **アイコン色番人**（2026-06-22 追加）：アイコンが文脈の正しいトークン色を“実際に”出しているかを守る2本立て。
 > ・静的 `tools/check-icon-color.sh`＝`MaterialIcon`の使用／`.ic`が`fill:currentColor`を継がない・固定塗り／アイコンSVGの直書きhex を検出（CIで必須）。
 > ・実測（Playwright）＝実画面の computed color で「選択中メニュー=`--fblue`／ヘッダー=`--gray`」を照合（AppShellを持つ製品のみ。portal は対象外）。
+>
+> **ヘッダー番人**（2026-06-22 追加）：ヘッダーがモック（正典5点＝最終同期/期間/会社/役割セレクタ/ヘルプ）からズレないように守る。
+> ・**構造を仕組みで固定**：共有 `<AppShell>` が5点を必ず描く＝Reactは `topbar={{ lastSync, period, company, role, auth? }}` の**必須propsを注入するだけ**（省略は型エラー＝ビルド赤）。`v0.2.0` 以降。
+> ・静的 `tools/check-header.sh`＝静的HTMLで5点の存在＋製品独自操作の混入を検査（対象に app/src も追加）。
+> ・実測（Playwright）＝実画面に5点が実在するかを照合（`check-icon-color-runtime.mjs` に相乗り。AppShellを持つ製品のみ）。
 
 ## 強制の効き方（大前提）
 ロックは**パソコンではなくGitHubのリポ単位**で効く。どのPC・どの道具で書いても、

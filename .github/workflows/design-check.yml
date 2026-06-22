@@ -20,6 +20,8 @@ jobs:
         run: sh tools/check-icon-color.sh .
       - name: フォントチェック（共通フォントのみ・細く見せる設定禁止）
         run: sh tools/check-font.sh .
+      - name: ヘッダーチェック（正典5点＝最終同期/期間/会社/役割セレクタ/ヘルプ・shell-demo.html）
+        run: sh tools/check-header.sh shell-demo.html
       - name: 重なりチェック（他の開いているPRと同じファイルを触っていないか）
         if: github.event_name == 'pull_request'
         env:
