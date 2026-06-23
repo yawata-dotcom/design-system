@@ -22,6 +22,8 @@ jobs:
         run: sh tools/check-font.sh .
       - name: ヘッダーチェック（正典5点＝最終同期/期間/会社/役割セレクタ/ヘルプ・shell-demo.html）
         run: sh tools/check-header.sh shell-demo.html
+      - name: 公式部品ガード（公式部品に置換済みの独自版クラスの使用を禁止・RULEBOOK §9）
+        run: sh tools/check-components.sh .
       - name: 重なりチェック（他の開いているPRと同じファイルを触っていないか）
         if: github.event_name == 'pull_request'
         env:
