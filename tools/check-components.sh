@@ -9,7 +9,7 @@
 #   新しい逸脱を見つけたら、ここに「独自版:公式置換先」を1語追記する。
 set -u
 
-DENY="btn-p:.btn btn-s:.btn.ghost btn-primary:.btn btnp:.btn cmp:.tbl2 mkv:.kv mnote2:.callout mapnote:.callout schip:.chip-c alrow:.timeline otabs:.utabs"
+DENY="btn-p:.btn btn-s:.btn.ghost btn-primary:.btn btnp:.btn cmp:.tbl2 mkv:.kv mnote2:.callout mapnote:.callout schip:.chip-c alrow:.timeline otabs:.utabs crumbs:.crumb"
 
 if [ "$#" -eq 0 ]; then
   echo "usage: sh tools/check-components.sh <file|dir> ..." >&2
