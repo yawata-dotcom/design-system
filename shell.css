@@ -78,3 +78,21 @@
 .appshell-topbar .ic{color:var(--gray);}
 .appshell-topbar .sync{margin-right:auto;}
 .appshell-topbar .plan{border:1px solid var(--activebg);color:var(--fblue);border-radius:14px;padding:2px 12px;font-weight:600;}
+
+/* ハンバーガー＆バックドロップ（モバイル用・既定は非表示） */
+.appshell-burger{display:none;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer;flex-shrink:0;margin-right:auto;padding:0;}
+.appshell-burger:hover{background:var(--topbar);}
+.appshell-burger .ic{width:20px;height:20px;color:var(--text);}
+.appshell-backdrop{display:none;}
+
+/* スマホ：サイドメニューを引き出し（off-canvas）に。本文(flex:1)が全幅化する */
+@media(max-width:980px){
+  .appshell-side{position:fixed;left:0;top:0;height:100vh;width:264px;z-index:1400;
+    transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 14px 36px rgba(0,0,0,.18);}
+  .appshell.nav-open .appshell-side{transform:translateX(0);}
+  .appshell-backdrop{display:block;position:fixed;inset:0;background:rgba(0,0,0,.4);
+    opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:1390;}
+  .appshell.nav-open .appshell-backdrop{opacity:1;pointer-events:auto;}
+  .appshell-burger{display:inline-flex;}
+  .appshell-topbar{flex-wrap:wrap;gap:8px;padding:8px 12px;}
+}
