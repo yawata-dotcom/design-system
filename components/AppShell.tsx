@@ -9,6 +9,15 @@
    ・変更できるのは社長のみ。
    ========================================================= */
 import * as React from 'react';
+import { createPortal } from 'react-dom';
+
+/** サブメニュー（フライアウト）の1行 */
+export type ShellFlyoutLink = {
+  /** 表示名 */
+  title: string;
+  /** 遷移先 */
+  href: string;
+};
 
 /** サイドメニューの1項目 */
 export type ShellItem = {
@@ -22,6 +31,9 @@ export type ShellItem = {
   badge?: string;
   /** 選択中（現在地）かどうか */
   active?: boolean;
+  /** サブメニュー（フライアウト）。指定すると右端に「›」印が付き、ホバーで横に開く。
+      骨格＝shell.css の .appshell-hasflyout / .appshell-flyout（最初からある正典定義） */
+  flyout?: ShellFlyoutLink[];
 };
 
 /** サイドメニューの1セクション（見出し＋項目群） */
@@ -87,6 +99,8 @@ const IC_ROLE =
   'M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z';
 const IC_HELP =
   'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z';
+/* サブメニュー印「›」（Material chevron_right・正典シェルの .chev 用） */
+const IC_CHEV = 'M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z';
 
 function TopIcon({ d }: { d: string }) {
   return (
@@ -133,6 +147,99 @@ function Topbar({ lastSync, period, company, role, auth }: ShellTopbar) {
 }
 
 /**
+ * サブメニュー（フライアウト）つきの項目。
+ * 動き＝mock で確立した作法と同一：ホバーで横に開く／パネルは body 直下（portal）＝
+ * サイドバーの overflow・モバイル時の transform に切られない／閉じは150ms遅延／
+ * 位置＝ボタン右+8px・下に収まらなければ上向き・画面端の余白12px。
+ */
+function FlyoutItem({ item, onNavigate }: { item: ShellItem; onNavigate?: (href: string) => void }) {
+  const btnRef = React.useRef<HTMLButtonElement>(null);
+  const flyRef = React.useRef<HTMLDivElement>(null);
+  const closeTimer = React.useRef<number | null>(null);
+  const [mounted, setMounted] = React.useState(false); // SSRでは document が無い＝portalは載ってから
+  const [open, setOpen] = React.useState(false);
+  const [pos, setPos] = React.useState<{ left: number; top: number } | null>(null);
+
+  React.useEffect(() => {
+    setMounted(true);
+    return () => { if (closeTimer.current) window.clearTimeout(closeTimer.current); };
+  }, []);
+
+  const cancelClose = () => {
+    if (closeTimer.current) { window.clearTimeout(closeTimer.current); closeTimer.current = null; }
+  };
+  const openFly = () => { cancelClose(); setOpen(true); };
+  const closeFly = () => {
+    cancelClose();
+    closeTimer.current = window.setTimeout(() => { setOpen(false); setPos(null); }, 150);
+  };
+
+  // 開いた直後に実寸を測って配置（描画前に走る＝ちらつかない）
+  React.useLayoutEffect(() => {
+    if (!open) return;
+    const btn = btnRef.current, fly = flyRef.current;
+    if (!btn || !fly) return;
+    const r = btn.getBoundingClientRect();
+    const fh = fly.offsetHeight;
+    const m = 12;
+    let top = r.top;
+    if (top + fh > window.innerHeight - m) top = Math.max(m, r.bottom - fh); // 下に入らなければ上向き
+    if (top < m) top = m;
+    setPos({ left: r.right + 8, top });
+  }, [open]);
+
+  return (
+    <div className={`appshell-hasflyout${open ? ' open' : ''}`}>
+      <button
+        ref={btnRef}
+        className={`appshell-item${item.active ? ' active' : ''}`}
+        onClick={item.href && onNavigate ? () => onNavigate(item.href!) : undefined}
+        onMouseEnter={openFly}
+        onMouseLeave={closeFly}
+        onFocus={openFly}
+        onBlur={closeFly}
+      >
+        {item.icon}
+        {item.title}
+        <span className="chev">
+          <svg className="ic" viewBox="0 0 24 24" aria-hidden="true"><path d={IC_CHEV} /></svg>
+        </span>
+      </button>
+      {mounted
+        ? createPortal(
+            <div
+              ref={flyRef}
+              className="appshell-flyout"
+              style={
+                open
+                  ? { display: 'block', left: pos ? pos.left : -9999, top: pos ? pos.top : 0, visibility: pos ? undefined : 'hidden' }
+                  : undefined /* 閉＝shell.css の display:none に任せる */
+              }
+              onMouseEnter={cancelClose}
+              onMouseLeave={closeFly}
+            >
+              {(item.flyout ?? []).map((l) => (
+                <a
+                  key={`${l.title}:${l.href}`}
+                  onClick={() => {
+                    cancelClose();
+                    setOpen(false);
+                    setPos(null);
+                    if (onNavigate) onNavigate(l.href);
+                  }}
+                >
+                  {l.title}
+                </a>
+              ))}
+            </div>,
+            document.body
+          )
+        : null}
+    </div>
+  );
+}
+
+/**
  * 正典シェル。外殻・サイドバー・ヘッダーの骨格を固定し、中身だけを props で受ける。
  * 見た目は shell.css（と tokens.css）が与える。
  */
@@ -156,7 +263,9 @@ export function AppShell({
           <React.Fragment key={sec.label}>
             <div className="appshell-seclabel">{sec.label}</div>
             {sec.items.map((it) =>
-              it.href ? (
+              it.flyout && it.flyout.length ? (
+                <FlyoutItem key={it.title} item={it} onNavigate={onNavigate} />
+              ) : it.href ? (
                 <button
                   key={it.title}
                   className={`appshell-item${it.active ? ' active' : ''}`}
