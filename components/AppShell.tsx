@@ -75,8 +75,13 @@ export type ShellTopbar = {
 export type AppShellProps = {
   /** ブランド領域（製品名・ロゴ等）。文字列なら <span> で包む */
   brand: React.ReactNode;
-  /** 事業ランチャー（任意・ブランド右の□ボタン＋パネル一式を渡す。appshell-launchwrap で包む） */
+  /** 事業ランチャー（任意）＝ブランド右の□ボタン本体。appshell-launchwrap で包む。
+   *  切替パネルは launcherPanel に分けて渡す（Shell が body 直下へ portal して位置決めするため）。 */
   launcher?: React.ReactNode;
+  /** 事業ランチャーの切替パネルの中身（.lpcard 等）。launcher と対で渡すと、
+   *  ボタンのホバーで body 直下（portal）に開き、位置＝ボタン右横・6px上で固定表示する
+   *  （フライアウトと同じ作法＝サイドバーの overflow・重なりに切られない）。 */
+  launcherPanel?: React.ReactNode;
   /** サイドメニュー */
   sections: ShellSection[];
   /** href のある項目を押したとき（遷移は各製品の流儀＝router 等で行う） */
@@ -240,12 +245,79 @@ function FlyoutItem({ item, onNavigate }: { item: ShellItem; onNavigate?: (href:
 }
 
 /**
+ * 事業ランチャー（ブランド右の□ボタン＋切替パネル）。
+ * 動き＝mock／フライアウトで確立した作法と同一：ホバーで開く／パネルは body 直下（portal）＝
+ * サイドバーの overflow・モバイル時の transform に切られない／閉じは150ms遅延／
+ * 位置＝ボタン右横・6px上で固定表示（右横の7px余白は shell.css の padding-left）。
+ */
+function LauncherHost({ button, panel }: { button: React.ReactNode; panel: React.ReactNode }) {
+  const wrapRef = React.useRef<HTMLDivElement>(null);
+  const closeTimer = React.useRef<number | null>(null);
+  const [mounted, setMounted] = React.useState(false); // SSRでは document が無い＝portalは載ってから
+  const [open, setOpen] = React.useState(false);
+  const [pos, setPos] = React.useState<{ left: number; top: number } | null>(null);
+
+  React.useEffect(() => {
+    setMounted(true);
+    return () => { if (closeTimer.current) window.clearTimeout(closeTimer.current); };
+  }, []);
+
+  const cancelClose = () => {
+    if (closeTimer.current) { window.clearTimeout(closeTimer.current); closeTimer.current = null; }
+  };
+  const openPanel = () => { cancelClose(); setOpen(true); };
+  const closePanel = () => {
+    cancelClose();
+    closeTimer.current = window.setTimeout(() => { setOpen(false); setPos(null); }, 150);
+  };
+
+  // 開いている間はボタン基準で位置を合わせる（開いた直後・スクロール・リサイズで追従）
+  const place = React.useCallback(() => {
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+    const r = wrap.getBoundingClientRect();
+    setPos({ left: r.right, top: r.top - 6 });
+  }, []);
+  React.useLayoutEffect(() => { if (open) place(); }, [open, place]);
+  React.useEffect(() => {
+    if (!open) return;
+    window.addEventListener('resize', place);
+    window.addEventListener('scroll', place, true);
+    return () => { window.removeEventListener('resize', place); window.removeEventListener('scroll', place, true); };
+  }, [open, place]);
+
+  return (
+    <div className="appshell-launchwrap" ref={wrapRef} onMouseEnter={openPanel} onMouseLeave={closePanel}>
+      {button}
+      {mounted && panel
+        ? createPortal(
+            <div
+              className="appshell-launchpanel"
+              style={
+                open
+                  ? { display: 'block', left: pos ? pos.left : -9999, top: pos ? pos.top : 0, visibility: pos ? undefined : 'hidden' }
+                  : undefined /* 閉＝shell.css の display:none に任せる */
+              }
+              onMouseEnter={cancelClose}
+              onMouseLeave={closePanel}
+            >
+              {panel}
+            </div>,
+            document.body
+          )
+        : null}
+    </div>
+  );
+}
+
+/**
  * 正典シェル。外殻・サイドバー・ヘッダーの骨格を固定し、中身だけを props で受ける。
  * 見た目は shell.css（と tokens.css）が与える。
  */
 export function AppShell({
   brand,
   launcher,
+  launcherPanel,
   sections,
   onNavigate,
   topbar,
@@ -256,7 +328,11 @@ export function AppShell({
       <nav className="appshell-side" aria-label="メインメニュー">
         <div className="appshell-brand">
           {typeof brand === 'string' ? <span>{brand}</span> : brand}
-          {launcher ? <div className="appshell-launchwrap">{launcher}</div> : null}
+          {launcher && launcherPanel ? (
+            <LauncherHost button={launcher} panel={launcherPanel} />
+          ) : launcher ? (
+            <div className="appshell-launchwrap">{launcher}</div>
+          ) : null}
         </div>
 
         {sections.map((sec) => (
