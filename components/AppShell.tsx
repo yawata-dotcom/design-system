@@ -55,21 +55,24 @@ export type ShellRole = {
 };
 
 /**
- * ヘッダー（共通上バー）の中身＝正典シェル(shell-demo.html)の固定5点セット。
- * 各製品は「値」を注入するだけ。枠・並び・アイコン・「最終同期」ラベルは本部品が必ず描く
+ * ヘッダー（共通上バー）の中身＝正典セット（2026-07-19 社長確定・ヘッダー統一）。
+ * 並び＝会社名（左）｜役割セレクタ → メールアドレス → ログアウト → ヘルプ（右寄せ）。
+ * 各製品は「値」を注入するだけ。枠・並び・アイコン・ボタンの形は本部品が必ず描く
  * ＝省略・改変できない（構造のズレを仕組みで防ぐ）。
+ * 旧v0.4以前の lastSync（最終同期）・period（期間）は廃止
+ * （正＝警備リポ design/ヘッダー統一_壁打ち確定_20260719.md・RULEBOOK§4）。
  */
 export type ShellTopbar = {
-  /** 最終同期の値（例 '2026-06-05 14:21'）。ラベル「最終同期 」は本部品が付ける（.sync で左寄せ） */
-  lastSync: React.ReactNode;
-  /** 対象期間（例 '2026-04-01 〜 2027-03-31'） */
-  period: React.ReactNode;
-  /** 会社名／事業名（例 '株式会社○○'） */
+  /** 会社名＝運営会社の正式名だけ（例 '株式会社Esupport'／警備のみ '株式会社Esecurity'）。
+      事業名サフィックスは付けない＝どの事業かは左上ブランド（正式プロダクト名）が担う */
   company: React.ReactNode;
-  /** 役割（権限）セレクタ */
-  role: ShellRole;
-  /** 認証スロット（ログイン/ログアウト・メール等。任意。next-auth 等の依存は本部品に持たせない＝各製品が要素を渡す） */
-  auth?: React.ReactNode;
+  /** 役割（権限）セレクタ＝そのプロダクトで付与されている役割名（番号なし）。
+      未指定＝役割未整備の事業→本部品がグレーの「準備中」を描く（役割の自動配布はしない） */
+  role?: ShellRole;
+  /** ログイン中アカウントのメールアドレス（氏名は出さない＝RULEBOOK§4）。SSO未接続の製品は省略 */
+  authEmail?: React.ReactNode;
+  /** ログアウト押下時の処理（authEmail とセットで渡す）。ボタンの形＝見本帳「淡ボタン(小)」を本部品が描く */
+  onLogout?: () => void;
 };
 
 export type AppShellProps = {
@@ -86,7 +89,7 @@ export type AppShellProps = {
   sections: ShellSection[];
   /** href のある項目を押したとき（遷移は各製品の流儀＝router 等で行う） */
   onNavigate?: (href: string) => void;
-  /** ヘッダー（上バー）の固定5点セット（最終同期/期間/会社/役割/ヘルプ）＋認証スロット。値を注入するだけ。 */
+  /** ヘッダー（上バー）の正典セット（会社名/役割/メール/ログアウト/ヘルプ）。値を注入するだけ。 */
   topbar: ShellTopbar;
   /** メイン領域（各画面の中身） */
   children: React.ReactNode;
@@ -94,10 +97,6 @@ export type AppShellProps = {
 
 /* 正典シェル(shell-demo.html)のヘッダー公式アイコン（Material Design Icons）を内蔵。
    react-icons 等に依存させない＝どの製品でも壊れずに同じ形が出る。 */
-const IC_SYNC =
-  'M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z';
-const IC_PERIOD =
-  'M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z';
 const IC_COMPANY =
   'M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z';
 const IC_ROLE =
@@ -115,35 +114,41 @@ function TopIcon({ d }: { d: string }) {
   );
 }
 
-/** ヘッダー（上バー）：固定5点セットを必ず描く。各製品は値（topbar props）を注入するだけ。 */
-function Topbar({ lastSync, period, company, role, auth }: ShellTopbar) {
+/** ヘッダー（上バー）：正典セットを必ず描く。各製品は値（topbar props）を注入するだけ。 */
+function Topbar({ company, role, authEmail, onLogout }: ShellTopbar) {
   return (
     <div className="appshell-topbar">
-      <span className="sync">
-        <TopIcon d={IC_SYNC} />最終同期 {lastSync}
-      </span>
-      <span>
-        <TopIcon d={IC_PERIOD} />{period}
-      </span>
-      <span>
+      <span className="company">
         <TopIcon d={IC_COMPANY} />{company}
       </span>
       <span className="rolesw">
         <TopIcon d={IC_ROLE} />
-        <select
-          aria-label={role.ariaLabel ?? '権限'}
-          {...(role.onChange
-            ? { value: role.value, onChange: (e: React.ChangeEvent<HTMLSelectElement>) => role.onChange!(e.target.value) }
-            : { defaultValue: role.value })}
-        >
-          {role.options.map((o) => (
-            <option key={o} value={o}>
-              {o}
-            </option>
-          ))}
-        </select>
+        {role ? (
+          <select
+            aria-label={role.ariaLabel ?? '権限'}
+            {...(role.onChange
+              ? { value: role.value, onChange: (e: React.ChangeEvent<HTMLSelectElement>) => role.onChange!(e.target.value) }
+              : { defaultValue: role.value })}
+          >
+            {role.options.map((o) => (
+              <option key={o} value={o}>
+                {o}
+              </option>
+            ))}
+          </select>
+        ) : (
+          /* 役割未整備の事業＝グレーの「準備中」（枠は同じ型・押しても何も起きない・役割の自動配布はしない） */
+          <select aria-label="権限（準備中）" disabled>
+            <option>準備中</option>
+          </select>
+        )}
       </span>
-      {auth ? <span className="authslot">{auth}</span> : null}
+      {authEmail ? <span className="authslot">{authEmail}</span> : null}
+      {onLogout ? (
+        <button className="appshell-logout" type="button" onClick={onLogout}>
+          ログアウト
+        </button>
+      ) : null}
       <span>
         <TopIcon d={IC_HELP} />
       </span>
