@@ -76,7 +76,6 @@
   font-size:12.5px;color:var(--text);position:sticky;top:0;z-index:5;}
 .appshell-topbar span{display:inline-flex;align-items:center;gap:5px;}
 .appshell-topbar .ic{color:var(--gray);}
-.appshell-topbar .company{margin-right:auto;}
 .appshell-topbar .plan{border:1px solid var(--activebg);color:var(--fblue);border-radius:14px;padding:2px 12px;font-weight:600;}
 /* 役割未整備の「準備中」（グレー・押せない） */
 .appshell-topbar .rolesw select:disabled{color:var(--gray);cursor:default;}
