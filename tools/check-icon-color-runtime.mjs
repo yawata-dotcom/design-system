@@ -69,31 +69,33 @@ try {
     }
   }
 
-  // ── ヘッダー（共通上バー）の正典5点が“実在”するか（モックとアプリのズレ防止）──
-  //   最終同期(.sync) / 期間 / 会社名 / 役割セレクタ(.rolesw>select) / ヘルプ。
-  //   共有 <AppShell> が5点を固定描画していれば必ず通る。React実装の最終担保。
+  // ── ヘッダー（共通上バー）の正典セットが“実在”するか（2026-07-19 ヘッダー統一・モックとアプリのズレ防止）──
+  //   会社名(.company) / 役割セレクタ(.rolesw>select) / （任意：メール・ログアウト） / ヘルプ。
+  //   旧5点の 最終同期(.sync)・期間 は廃止＝残っていたら赤（消し忘れ検知）。
   const header = await page.evaluate(() => {
     const bar = document.querySelector('.appshell-topbar');
     if (!bar) return { exists: false };
     return {
       exists: true,
-      sync: !!bar.querySelector('.sync'),
+      company: !!bar.querySelector('.company'),
       role: !!bar.querySelector('.rolesw select'),
+      sync: !!bar.querySelector('.sync'),
       icons: bar.querySelectorAll('.ic').length,
     };
   });
   if (!header.exists) {
-    console.log('… appshell-topbar が無い画面（ヘッダー5点チェックは対象外）');
+    console.log('… appshell-topbar が無い画面（ヘッダー正典チェックは対象外）');
   } else {
     const need = [];
-    if (!header.sync) need.push('最終同期(.sync)');
+    if (!header.company) need.push('会社名(.company)');
     if (!header.role) need.push('役割セレクタ(.rolesw>select)');
-    if (header.icons < 5) need.push(`5点未満(ヘッダーのアイコン${header.icons}個)`);
+    if (header.sync) need.push('廃止済みの最終同期(.sync)が残存');
+    if (header.icons < 3) need.push(`アイコン不足(${header.icons}個・会社/役割/ヘルプ=3個以上)`);
     if (need.length) {
-      console.error(`NG: ヘッダー正典5点が欠けています：${need.join(' ')}（最終同期/期間/会社/役割セレクタ/ヘルプ）`);
+      console.error(`NG: ヘッダー正典セットの違反：${need.join(' ')}（会社名/役割/メール/ログアウト/ヘルプ＝確定書2026-07-19）`);
       fail++;
     } else {
-      console.log(`OK: ヘッダー正典5点 実在（.sync/期間/会社/.rolesw/ヘルプ・アイコン${header.icons}個）`);
+      console.log(`OK: ヘッダー正典セット 実在（.company/.rolesw/ヘルプ・アイコン${header.icons}個）`);
     }
   }
 } catch (e) {
