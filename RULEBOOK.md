@@ -48,6 +48,7 @@
   - **`@freee_jp/vibes` の `MaterialIcon` は使わない。** これは塗りを `#323232` に固定して `currentColor` を継がず、選択中／ヘッダーの色が濃グレーにズレる（2026-06-22 建設で実際に発生）。`#323232` も `md` も“公式”のため、色番人・アイコン番人を素通りしてしまうので、人の目でなく機械で止める。
   - アイコンSVGの塗りは `fill="currentColor"` か `fill="var(--token)"`。**直書きhex（`fill="#…"`）は禁止**（ランチャー等のトークン色も `var(--token)` で）。
 - 同じ記号＝同じ意味（チェック＝完了 等）。勝手に別アイコンで同概念を表さない。
+- **要確認・警告の印＝Material の Warning アイコン（赤＝`var(--red)`）**。文字の「⚠」「❗」等を印として使わない（本文中の説明語としての使用は可）。実装例＝警備の `i-alert`（mockスプライト）／建設の `components/WarnIcon.tsx`（`MdWarning`）。**経緯**＝2026-09-03 全製品調査（警備＝アイコン40か所・建設/本社＝文字⚠）→社長決定「アイコンに統一」（決定台帳8-22⒄⑸）。
 - **自動チェック**：CI（design-check）で2本走る。`tools/check-icons.sh`（2026-06-21〜）＝Material以外（他react-iconsセット・lucide/heroicons/fontawesome等・Lucide系スプライト痕跡）を検出。`tools/check-icon-color.sh`（2026-06-22〜）＝`MaterialIcon`の使用・`.ic`が`fill:currentColor`を継がない/固定塗り・アイコンSVGの直書きhex を検出。さらに**実測番人（Playwright）**で「選択中=青／ヘッダー=グレー」を実画面のcomputed colorで照合（AppShellを持つ製品）。※絵文字や手書きSVGの真贋は機械判定が難しいため、これら自動チェック＋見本帳＋レビューで守る。
 
 ## 7. ログイン・権限
