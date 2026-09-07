@@ -3,6 +3,23 @@
 全プロダクト共通の**技術スタック**と**設計方針**。各製品はこれを踏襲する。
 **変更できるのは社長のみ。** 各製品は「使う／参照するだけ」。色・UI作法は [`RULEBOOK.md`](./RULEBOOK.md) と [`tokens.css`](./tokens.css) を参照。
 
+## 全体方式（2026-06-12 確定）
+**「Google内Webアプリ ＋ Cloud SQL」に決定**。重視軸は ①セキュリティ ②UI・UX ③操作性。費用は制約にしない（社長明言）。
+- アプリ本体：**Google Cloud 上に構築するWebアプリ**。管理画面（PC）・現場スマホサイト・社外向けポータル（閲覧専用）を、**役割別の権限で同じ仕組みから提供**する。
+- データベース：**Cloud SQL（PostgreSQL）を新規構築**。表と表の突き合わせ（突合・整合性チェック）に強い関係データベースを採用。既存のスプレッドシートをDBにしない。
+- 「目で見る安心」対策：**毎晩、閲覧用スプレッドシートに読み取り専用コピーを自動書き出す**。担当者は従来どおりシートを開いて確認できる。**本体データはアプリ経由でのみ操作し、人が直接DBを触らない。**
+- 既存データは既存シートから Cloud SQL へ移行する（既存シート側は変更しない）。
+- 裏方の自動処理（夜間バッチ・外部同期等）は適材適所でGASを併用してよい。
+- データはGoogleの敷地内に留める設計を維持。グラフは**外部送信しない方式**（インラインSVG等）で描く。
+
+## UI方針（2026-06-12 確定）
+- デザイン/UI/操作/アイコン/色の最新ルールは [`RULEBOOK.md`](./RULEBOOK.md) が「唯一の正」（公開版が優先・変更は社長のみ）。見本帳 `https://yawata-dotcom.github.io/design-system/gallery.html`。**アイコンは Material（`react-icons/md`・公式SVG）のみ＝見本帳から選ぶ／色は公式17トークンのみ**。CI（design-check）で色・アイコンを全製品自動チェック（`tools/check-colors.sh`／`tools/check-icons.sh`）。
+- **freee公式デザインシステム「vibes」を採用**（npm: `@freee_jp/vibes`、Apache-2.0で商用利用可、2026年2月時点で更新が続く現役）。社員が会計・人事労務・販売・工数管理など全freeeプロダクトに慣れているため、導入アレルギー対策として「似せる」のではなく**freee純正の部品で組む**。
+- 画面側の技術は **React**（vibesの前提技術。Webアプリ方式と整合）。
+- 参照辞書：部品カタログ https://vibes.freee.co.jp/ ／ ソース https://github.com/freee/vibes 。主要部品の対応：header・globalNavi（上部バー/サイドメニュー）、basicTable・hierarchicalTable（一覧表）、formFields・formBlock（入力）、calendar（シフト）、dialogs（承認）、fileUploader（履歴書添付）、filterTag・dropdown（絞り込み）等。
+- vibesにない「画面の組み立てパターン」は、担当者ログイン済みの実物freee画面をChrome経由で計測して補正する。**計測時に金額・取引先名などの機密データは記録しない**。
+- **freeeのロゴ・名称は使わない**（Apache-2.0でも商標は対象外。社員・社外の誤認防止）。画面には自社システム名を明示する。
+
 ## 技術スタック（2026-06-16 確定）
 - **フロント**：React + TypeScript（freee vibes ベースのUI）
 - **バックエンド**：Node + TypeScript（言語をTSに統一。フロント／バック／既存GASを同じJS系で揃え、保守・AI開発・採用に有利。Go等は不採用）。Webフレームワークは実装着手時に選定。
@@ -40,5 +57,6 @@
 > 全社の技術・設計方針は `design-system/TECH-POLICY.md`（公開リポ yawata-dotcom/design-system）に従う。
 
 ## 更新履歴
+- 2026-09-07 「全体方式」「UI方針」章を追加（司令塔 CLAUDE.md §7 から移設＝司令塔の軽量化。製品固有の記述は各製品の CLAUDE.md へ）。
 - 2026-07-29 「ファイル保存の作法」章を追加（社長確定＝文字はDB・システム主役のファイルは倉庫・人が主役の書類はドライブ・例外なし）。
 - 2026-06-16 初版（バックエンド言語＝Node/TS に確定。Go/Echo/Goose は不採用）。
