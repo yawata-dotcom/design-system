@@ -15,6 +15,7 @@
 | `design-consistency` | 設計整合役（設計書・用語定義集との一致） | Sonnet | 機能完成ごとのチェック班 |
 | `freee-integration` | freee連携役（会社ID固定・レート制限・名寄せ） | Sonnet | freee APIに触れる変更時 |
 | `verifier` | 裏取り役（指摘を現物で再確認・誤検出落とし） | Opus | 並列レビューの後・毎回 |
+| `codex-adversarial-reviewer` | 別の目の批判レビュー役（**外部＝Codex／GPT-6 Astra**・読み取り専用・`shared-notes/scripts/codexレビュー.sh` 経由で Claude が呼ぶ） | 外部（Codex CLI・ChatGPT Pro） | 全PR（docs だけの PR は除く）・裏取り役の前 |
 | `review-chief` | 総括役（統合・見落とし探し・優先順位＝最後の関所） | **Fable** | レビューサイクルの最後に1回 |
 | `design-guard` | 全社共通ルールの番人レビュー（check-*.sh実行＋報告） | Haiku | コミット・PRの前 |
 | `db-migrator` | DB移行役（マイグレーションSQL・データ引っ越しの設計/作成/点検） | Opus | DB構造の変更・既存データ移行時（**本番適用は社長伴走**）※2026-07-05追加（社長指示） |
