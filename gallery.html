@@ -376,6 +376,23 @@
   .launchpanel .lpi:hover{background:var(--topbar);color:var(--fblue);}
   .launchpanel .lpi.on{color:var(--fblue);font-weight:700;}
   .launchpanel .lpsoon{margin-left:auto;font-size:9px;color:var(--gray);}
+  /* 51 候補つき入力（マスタから選ぶ）：閉じた姿＝③の入力欄と同じ／一覧は §11 で body 直下・最前面 */
+  .combo{position:relative;width:300px;}
+  .combo input{width:100%;box-sizing:border-box;padding-right:30px;}
+  .combo .cv{position:absolute;right:8px;top:50%;transform:translateY(-50%);display:flex;color:var(--gray);pointer-events:none;}
+  .combolist{position:fixed;display:none;z-index:2000;box-sizing:border-box;background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,.14);overflow:hidden;}
+  .combolist .utabs{padding:0 6px;box-sizing:border-box;}
+  .combolist .opts{max-height:236px;overflow:auto;padding:6px;}
+  .combolist .opt{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:6px;font-size:13px;cursor:pointer;color:var(--text);}
+  .combolist .opt:hover,.combolist .opt.cur{background:var(--topbar);}
+  .combolist .opt.on{color:var(--fblue);font-weight:600;}
+  .combolist .opt .ck{margin-left:auto;display:flex;color:var(--fblue);visibility:hidden;}
+  .combolist .opt.on .ck{visibility:visible;}
+  .combolist .none{padding:9px;font-size:12.5px;color:var(--gray);}
+  .combolist .more{display:block;width:100%;border:none;background:none;font:inherit;font-size:12.5px;font-weight:700;color:var(--fblue);padding:7px 9px;text-align:left;cursor:pointer;border-radius:6px;}
+  .combolist .more:hover,.combolist .more.cur{background:var(--topbar);}
+  .combolist .new{display:flex;align-items:center;gap:6px;border-top:1px solid var(--line);padding:10px 12px;font-size:13px;font-weight:700;color:var(--fblue);cursor:pointer;}
+  .combolist .new:hover,.combolist .new.cur{background:var(--activebg);}
 </style>
 </head>
 <body>
@@ -1010,6 +1027,28 @@ panel.style.position='fixed'; panel.style.display='block';</pre>
     </div>
   </section>
 
+  <!-- 候補つき入力 -->
+  <section><h2><span class="num">51</span>候補つき入力（マスタから選ぶ・§11で最前面）</h2>
+    <p class="hint">押す／打つと下に候補。上は下線タブ（履歴｜マスタの名前）。多い時は「もっと見る」。打った字がマスタに無い時だけ、一番下に「＋ 打った字（新規作成）」。閉じた姿は③の入力欄と同じ。↓↑・Enter・Esc で操作できる（字を打つ前は ←→ でタブを切り替え）。</p>
+    <div class="demo">
+      <div class="field"><label>契約先</label>
+        <div class="combo" data-combo="client" data-label="契約先"><input placeholder="契約先を選ぶ…" autocomplete="off"><span class="cv"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg></span></div>
+      </div>
+      <div class="field"><label>現場名称</label>
+        <div class="combo" data-combo="site" data-label="現場"><input placeholder="現場を選ぶ…" autocomplete="off"><span class="cv"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg></span></div>
+      </div>
+    </div>
+    <pre class="code">&lt;div class="<span class="t">field</span>"&gt;&lt;label&gt;契約先&lt;/label&gt;
+  &lt;div class="<span class="t">combo</span>"&gt;&lt;input role="combobox"&gt;&lt;span class="<span class="t">cv</span>"&gt;（MdExpandMore）&lt;/span&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- 一覧は body 直下（§11） --&gt;
+&lt;div class="<span class="t">combolist</span>" role="listbox"&gt;
+  &lt;div class="<span class="t">utabs</span>"&gt;&lt;button class="on"&gt;履歴&lt;/button&gt;&lt;button&gt;契約先&lt;/button&gt;&lt;/div&gt;
+  &lt;div class="<span class="t">opts</span>"&gt;&lt;div class="<span class="t">opt</span>" role="option"&gt;…&lt;/div&gt;&lt;button class="<span class="t">more</span>"&gt;もっと見る&lt;/button&gt;&lt;/div&gt;
+  &lt;div class="<span class="t">new</span>"&gt;（MdAdd）打った字（新規作成）&lt;/div&gt;
+&lt;/div&gt;</pre>
+  </section>
+
   <p class="note">この見本帳は公開リポ <code>design-system</code> 内。色を増やす・新しい共通部品を作るときは、自分で決めず社長に相談してください（共通部品の判断は社長）。</p>
 
 </div>
@@ -1207,6 +1246,95 @@ panel.style.position='fixed'; panel.style.display='block';</pre>
     });
     document.addEventListener('click',function(e){ if(!m.contains(e.target)) m.classList.remove('open'); });
   });
+
+  /* 候補つき入力（マスタから選ぶ）：一覧は §11 で body 直下・最前面／名前は全部見本（実在しない） */
+  (function(){
+    var CLIENTS=['見本建設株式会社','見本道路工業株式会社','例示土木株式会社','例示電設株式会社','サンプル舗装株式会社','サンプル水道工業株式会社','架空通信建設株式会社','架空造園株式会社','仮称ガス工事株式会社','仮称橋りょう株式会社'];
+    var SITES=Object.create(null); /* 名前を鍵にする＝継承プロパティ（constructor 等）を拾わない */
+    var SITES0={'見本建設株式会社':['見本町 交差点改良工事','見本川 護岸工事','見本団地 外構工事'],'例示土木株式会社':['例示バイパス 舗装補修工事','例示トンネル 照明更新工事'],'サンプル舗装株式会社':['サンプル通り 歩道整備工事']};
+    Object.keys(SITES0).forEach(function(k){SITES[k]=SITES0[k];});
+    var HIST={client:['見本建設株式会社','例示土木株式会社','サンプル舗装株式会社']};
+    var chosen={client:'',site:''}, combos={};
+    function dataOf(kind){
+      if(kind==='client') return {all:CLIENTS,hist:HIST.client};
+      var s=SITES[chosen.client]||(SITES[chosen.client]=[]);
+      return {all:s,hist:s.slice(0,2)};
+    }
+    function norm(s){return (s||'').replace(/[\s　]/g,'').toLowerCase();}
+    function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+    var CHECK='<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M9 16.17 4.83 12l-1.41 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+    var ADD='<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>';
+    var LIMIT=5, uid=0;
+    document.querySelectorAll('[data-combo]').forEach(function(c){
+      var kind=c.getAttribute('data-combo'), label=c.getAttribute('data-label'), inp=c.querySelector('input');
+      var id='combolist-'+(++uid), list=document.createElement('div');
+      list.className='combolist'; list.id=id; list.setAttribute('role','listbox');
+      inp.setAttribute('role','combobox'); inp.setAttribute('aria-autocomplete','list'); inp.setAttribute('aria-expanded','false'); inp.setAttribute('aria-controls',id);
+      var tab='hist', typed=false, showAll=false, cur=-1, isOpen=false;
+      function items(){return list.querySelectorAll('.opt,.more,.new');}
+      function setCur(i){
+        var its=items(); cur=(i<0||!its.length)?-1:Math.min(i,its.length-1);
+        for(var k=0;k<its.length;k++) its[k].classList.toggle('cur',k===cur);
+        if(cur>-1){ inp.setAttribute('aria-activedescendant',its[cur].id); its[cur].scrollIntoView({block:'nearest'}); } else inp.removeAttribute('aria-activedescendant');
+      }
+      function render(){
+        var d=dataOf(kind), q=typed?norm(inp.value):'';
+        var src=(tab==='hist'?d.hist:d.all).filter(function(v){return !q||norm(v).indexOf(q)>-1;});
+        var shown=showAll?src:src.slice(0,LIMIT);
+        var exact=d.all.some(function(v){return norm(v)===q;});
+        var h='<div class="utabs"><button type="button" data-tab="hist"'+(tab==='hist'?' class="on"':'')+'>履歴</button><button type="button" data-tab="all"'+(tab==='all'?' class="on"':'')+'>'+esc(label)+'</button></div><div class="opts">';
+        if(!shown.length) h+='<div class="none">'+(tab==='hist'?'履歴はありません':'候補がありません')+'</div>';
+        shown.forEach(function(v,i){ h+='<div class="opt'+(v===chosen[kind]?' on':'')+'" role="option" id="'+id+'-o'+i+'" data-val="'+esc(v)+'">'+esc(v)+'<span class="ck">'+CHECK+'</span></div>'; });
+        if(src.length>shown.length) h+='<button type="button" class="more" id="'+id+'-more">もっと見る（残り'+(src.length-shown.length)+'件）</button>';
+        h+='</div>';
+        if(q&&!exact) h+='<div class="new" role="option" id="'+id+'-new">'+ADD+'<span>'+esc(inp.value.trim())+'（新規作成）</span></div>';
+        list.innerHTML=h;
+        setCur(typed?0:-1);
+      }
+      function pos(){ place(list,inp,'down'); list.style.width=Math.max(inp.getBoundingClientRect().width,280)+'px'; }
+      function open(){
+        if(isOpen)return; isOpen=true; typed=false; showAll=false;
+        tab=dataOf(kind).hist.length?'hist':'all';
+        render(); pos(); inp.setAttribute('aria-expanded','true'); inp.select();
+      }
+      function close(){
+        if(!isOpen)return; isOpen=false; list.style.display='none';
+        inp.setAttribute('aria-expanded','false'); inp.removeAttribute('aria-activedescendant'); inp.value=chosen[kind];
+      }
+      function pick(v){
+        var changed=chosen[kind]!==v; chosen[kind]=v; close();
+        if(changed&&kind==='client'&&combos.site) combos.site.clear();
+      }
+      function create(){
+        var v=inp.value.trim(), d=dataOf(kind); if(!v)return;
+        d.all.unshift(v); if(kind==='client') HIST.client.unshift(v);
+        pick(v);
+      }
+      combos[kind]={clear:function(){chosen[kind]='';inp.value='';}};
+      inp.addEventListener('focus',open);
+      inp.addEventListener('click',open);
+      inp.addEventListener('blur',close);
+      inp.addEventListener('input',function(){ if(!isOpen){isOpen=true;pos();inp.setAttribute('aria-expanded','true');} typed=true; tab='all'; showAll=false; render(); });
+      inp.addEventListener('keydown',function(e){
+        if(e.isComposing||e.keyCode===229)return; /* IME の確定の Enter は拾わない */
+        if(e.key==='ArrowDown'){ e.preventDefault(); if(!isOpen)open(); else setCur(cur+1); }
+        else if(e.key==='ArrowUp'){ e.preventDefault(); if(isOpen)setCur(Math.max(cur-1,0)); }
+        else if((e.key==='ArrowLeft'||e.key==='ArrowRight')&&isOpen&&!typed){ e.preventDefault(); tab=(e.key==='ArrowLeft')?'hist':'all'; showAll=false; render(); } /* 打つ前だけ＝打った後の ←→ は字の中の移動 */
+        else if(e.key==='Enter'){ if(!isOpen||cur<0)return; e.preventDefault(); var it=items()[cur]; if(it.classList.contains('new'))create(); else if(it.classList.contains('more')){ var at=cur; showAll=true; render(); setCur(at); } else pick(it.getAttribute('data-val')); }
+        else if(e.key==='Escape'){ if(isOpen){e.preventDefault();close();} }
+      });
+      list.addEventListener('mousedown',function(e){e.preventDefault();}); /* 入力欄のフォーカスを保つ */
+      list.addEventListener('click',function(e){
+        var t=e.target.closest('[data-tab],.more,.opt,.new'); if(!t)return;
+        if(t.hasAttribute('data-tab')){ tab=t.getAttribute('data-tab'); showAll=false; render(); }
+        else if(t.classList.contains('more')){ showAll=true; render(); }
+        else if(t.classList.contains('new')) create();
+        else pick(t.getAttribute('data-val'));
+      });
+      window.addEventListener('resize',function(){ if(isOpen)pos(); });
+      window.addEventListener('scroll',function(e){ if(isOpen&&!list.contains(e.target))pos(); },true);
+    });
+  })();
 
   /* セル割当ポップオーバー・アプリランチャー：クリックで開く・§11でbody直下へ最前面 */
   [['popBtn','popPanel'],['launchBtn','launchPanel']].forEach(function(pair){
