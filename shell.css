@@ -14,7 +14,7 @@
 /* 外殻 */
 .appshell{display:flex;min-height:100vh;}
 .appshell-main{flex:1;min-width:0;}
-.appshell-content{padding:22px 26px;max-width:1200px;}
+.appshell-content{padding:22px 26px;max-width:1400px;} /* 中身の幅の上限 1200→1400px（2026-10-13 社長決定＝警備の名簿の一覧が 1200 では収まらない。1470px のノートでは +44px・広い画面でも行が長くなりすぎないよう上限は残す） */
 
 /* サイドバー */
 .appshell-side{width:226px;background:var(--card);border-right:1px solid var(--line);flex-shrink:0;
