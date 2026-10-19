@@ -11,6 +11,7 @@
 | `portal`（共通ポータル） | 静的 | ✅ | ✅ 静的／－ 実測（選択メニュー/ヘッダー無し＝対象外） | － ヘッダー無しの特殊画面（対象外） | ✅ |
 | `esupport-kensetsu`（建設） | React | ✅ | ✅ 静的／✅ 実測 | ✅ 共通シェル採用済（check-shell/appshell/vendored） | ✅ |
 | `esupport-honsha`（本社管理） | 静的(mock) | ✅ | ✅ 静的／✅ 実測 | ✅ 共通シェル採用済 | ✅ |
+| `esupport-shisetsu`（施設保安警備・2026-10-19開通） | React+mock | ✅ | ✅ 静的／✅ 実測 | ✅ 共通シェル採用済（check-shell/appshell/vendored） | ✅（必須チェック6本） |
 
 凡例：✅=導入済 ／ ⏳=未（予定） ／ －=対象外（理由を併記）
 
