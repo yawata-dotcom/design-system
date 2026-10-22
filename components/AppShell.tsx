@@ -15,8 +15,10 @@ import { createPortal } from 'react-dom';
 export type ShellFlyoutLink = {
   /** 表示名 */
   title: string;
-  /** 遷移先 */
-  href: string;
+  /** 遷移先。指定があれば押せる行、無ければ「近日公開」のグレー行（サイドメニューの項目と同じ作法・v0.6.0〜） */
+  href?: string;
+  /** 近日公開バッジ等の短いラベル（グレー行の右端に出す・例 '近日'） */
+  badge?: string;
 };
 
 /** サイドメニューの1項目 */
@@ -228,19 +230,32 @@ function FlyoutItem({ item, onNavigate }: { item: ShellItem; onNavigate?: (href:
               onMouseEnter={cancelClose}
               onMouseLeave={closeFly}
             >
-              {(item.flyout ?? []).map((l) => (
-                <a
-                  key={`${l.title}:${l.href}`}
-                  onClick={() => {
-                    cancelClose();
-                    setOpen(false);
-                    setPos(null);
-                    if (onNavigate) onNavigate(l.href);
-                  }}
-                >
-                  {l.title}
-                </a>
-              ))}
+              {(item.flyout ?? []).map((l) =>
+                l.href ? (
+                  <a
+                    key={`${l.title}:${l.href}`}
+                    onClick={() => {
+                      cancelClose();
+                      setOpen(false);
+                      setPos(null);
+                      if (onNavigate) onNavigate(l.href!);
+                    }}
+                  >
+                    {l.title}
+                  </a>
+                ) : (
+                  /* 近日公開のグレー行（押しても何もしない・サイドメニューの .appshell-item.soon と同じ見た目＝shell.css の .appshell-flyout a.soon） */
+                  <a
+                    key={l.title}
+                    className="soon"
+                    aria-disabled="true"
+                    title={l.badge ? `近日公開（${l.badge}）` : undefined}
+                  >
+                    {l.title}
+                    {l.badge ? <span className="badge">{l.badge}</span> : null}
+                  </a>
+                )
+              )}
             </div>,
             document.body
           )

@@ -69,6 +69,10 @@
 .appshell-flyout a{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:8px;font-size:13.5px;color:var(--text);text-decoration:none;cursor:pointer;}
 .appshell-flyout a::before{content:"";width:3px;height:16px;border-radius:2px;background:var(--fblue);flex-shrink:0;}
 .appshell-flyout a:hover{background:var(--topbar);color:var(--fblue);}
+.appshell-flyout a.soon{opacity:.45;cursor:not-allowed;}
+.appshell-flyout a.soon:hover{background:none;color:var(--text);}
+.appshell-flyout a.soon .badge{font-size:9px;font-weight:400;background:var(--bg);color:var(--gray);
+  padding:1px 5px;border-radius:8px;margin-left:auto;}
 
 /* ヘッダー（トップバー） */
 .appshell-topbar{background:var(--topbar);border-bottom:1px solid var(--line);
