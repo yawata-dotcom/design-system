@@ -7,6 +7,7 @@ on:
 jobs:
   colors:
     runs-on: ubuntu-latest
+    timeout-minutes: 10  # 2026-10-26 止まった時に待ち続けないように（いつもの約3倍・実測は合格24回の最大）
     permissions:
       contents: read
       pull-requests: read
@@ -34,6 +35,7 @@ jobs:
   # 「選択中=青／ヘッダー=グレー」を担保（各製品が写して使うテンプレ）。
   runtime:
     runs-on: ubuntu-latest
+    timeout-minutes: 10  # 2026-10-26 止まった時に待ち続けないように（いつもの約3倍・実測は合格24回の最大）
     permissions:
       contents: read
     steps:
@@ -42,6 +44,7 @@ jobs:
         with:
           node-version: 20
       - name: Playwright 導入（chromium のみ）
+        timeout-minutes: 5  # 外から部品を取る所（いつもは長くて31秒・止まりかけた1回は434秒）
         run: |
           npm init -y >/dev/null 2>&1
           npm i playwright >/dev/null 2>&1
