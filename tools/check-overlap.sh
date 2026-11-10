@@ -14,7 +14,21 @@
 #
 # 重なりがあったら：先に相手のPRをマージ→このブランチで
 #   git pull --rebase origin main → 出し直す（重なりが消えれば緑になる）。
+#
+# 【先に開いたPRを通す（2026-11-10 社長「はい、直して」）】
+#   赤にするのは「自分より番号が若い（＝先に開いた）PR」と重なる時だけ。
+#   自分の方が先なら緑のまま「後から来た #N と重なる」と知らせるだけ。
+#   ＝重なっている PR のうち、いちばん古い1本はいつでも通れる（両方赤のお見合いをなくす）。
+#   経緯＝2026-11-10 台帳 daicho#1127・#1128・#1129 が同じファイルで互いを赤にし、全部止まった。
+#   ⚠ 古い PR を閉じて開き直すと、閉じていた間に緑になった新しい側も緑のまま残る
+#     （番人は相手の判定をやり直さない）。開き直したら、新しい側の番人を
+#     gh run rerun で1回やり直す（赤に戻る＝正しい）。
 # ============================================================
+
+# 先着の判定：相手(other)が自分(this)より先に開いた PR なら 0（＝こちらが待つ側＝赤）
+other_is_earlier() {
+  [ "$2" -lt "$1" ]
+}
 
 # --- 自己テスト（オフライン）------------------------------------------------
 if [ "$1" = "--self-test" ]; then
@@ -22,8 +36,12 @@ if [ "$1" = "--self-test" ]; then
   printf 'src/a.tsx\nsrc/b.tsx\n' | sort > "$ta"
   printf 'src/b.tsx\nsrc/c.tsx\n' | sort > "$tb"
   common=$(comm -12 "$ta" "$tb"); rm -f "$ta" "$tb"
-  if [ "$common" = "src/b.tsx" ]; then echo "self-test OK"; exit 0; fi
-  echo "self-test FAIL: [$common]"; exit 1
+  if [ "$common" != "src/b.tsx" ]; then echo "self-test FAIL: [$common]"; exit 1; fi
+  # 先着の判定（自分 1128・相手 1127 ＝相手が先＝待つ／自分 1127・相手 1128 ＝自分が先＝通す）
+  if ! other_is_earlier 1128 1127; then echo "self-test FAIL: 先着（相手が先）"; exit 1; fi
+  if other_is_earlier 1127 1128; then echo "self-test FAIL: 先着（自分が先）"; exit 1; fi
+  if other_is_earlier 1127 1127; then echo "self-test FAIL: 先着（同じ番号）"; exit 1; fi
+  echo "self-test OK"; exit 0
 fi
 
 PR="$1"
@@ -57,18 +75,23 @@ for o in $others; do
   common=$(comm -12 "$curfile" "$ofile")
   rm -f "$ofile"
   if [ -n "$common" ]; then
-    echo "NG: 開いているPR #$o と同じファイルを編集しています："
-    printf '%s\n' "$common" | sed 's/^/    - /'
-    viol=$((viol + 1))
+    if other_is_earlier "$PR" "$o"; then
+      echo "NG: 先に開いている PR #$o と同じファイルを編集しています："
+      printf '%s\n' "$common" | sed 's/^/    - /'
+      viol=$((viol + 1))
+    else
+      echo "注意: 後から開いた PR #$o と同じファイルを触っています（こちらが先＝このPRは通します・#$o は待ちます）："
+      printf '%s\n' "$common" | sed 's/^/    - /'
+    fi
   fi
 done
 rm -f "$curfile"
 
 if [ "$viol" -gt 0 ]; then
   echo "----------------------------------------------"
-  echo "他の開いているPRと同じファイルを触っています（同時マージ防止のため停止）。"
+  echo "先に開いているPRと同じファイルを触っています（同時マージ防止のため停止・先に開いた方が通ります）。"
   echo "対応：先に相手のPRをマージ → このブランチで  git pull --rebase origin main  → 出し直してください。"
   exit 1
 fi
-echo "OK: 他の開いているPRとファイルの重なりはありません。"
+echo "OK: 先に開いているPRとのファイルの重なりはありません。"
 exit 0
