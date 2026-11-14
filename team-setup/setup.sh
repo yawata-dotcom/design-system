@@ -7,7 +7,8 @@
 # 安全設計：
 #   ・既存ファイルを上書きする前に必ず .bak バックアップを作る。
 #   ・ユーザーの設定(settings.json)・CLAUDE.md は勝手に置き換えない（案内のみ）。
-#   ・スキルはライセンス配慮で同梱しないため、導入手順を表示するだけ。
+#   ・外から入れるスキルはライセンス配慮で同梱しないため、導入手順を表示するだけ。
+#   ・会社で作ったスキル（skills/）だけは同梱し、~/.claude/skills/ へ取り込む。
 #
 # 使い方：  sh team-setup/setup.sh
 # ============================================================
@@ -41,6 +42,29 @@ for f in "$SRC"/agents/*.md; do
   echo "  取り込み: agents/$base"
 done
 
+# 1b) 会社で作ったスキル（実体を同梱）→ ~/.claude/skills/<名前>/
+echo ""
+echo "[1b] 会社で作ったスキルを取り込みます"
+mkdir -p "$DEST/skills"
+for d in "$SRC"/skills/*/; do
+  [ -f "$d/SKILL.md" ] || continue
+  name=$(basename "$d")
+  target="$DEST/skills/$name"
+  if [ -L "$target" ]; then
+    echo "  とばす: skills/$name（リンクになっているので触りません）"
+    continue
+  fi
+  if [ -d "$target" ] && ! diff -rq "$d" "$target" >/dev/null 2>&1; then
+    # 写しは skills/ の外へ（skills/ の中に置くと、古い写しまでスキルとして読まれるため）
+    mkdir -p "$DEST/skills-backup"
+    mv "$target" "$DEST/skills-backup/$name.$stamp"
+    echo "  既存をバックアップ: $DEST/skills-backup/$name.$stamp"
+  fi
+  mkdir -p "$target"
+  cp -R "$d". "$target/"
+  echo "  取り込み: skills/$name"
+done
+
 # 2) 共通の作業ルール → ~/.claude/CLAUDE.shared.md（既存 CLAUDE.md は触らない）
 echo ""
 echo "[2/4] 共通の作業ルールを置きます（既存のCLAUDE.mdは上書きしません）"
@@ -67,6 +91,6 @@ echo "    先に中身だけ確認する場合： sh team-setup/install-skills.s
 
 echo ""
 echo "==========================================================="
-echo " 完了。Claude Code を開き直すと、標準エージェントが使えます。"
+echo " 完了。Claude Code を開き直すと、標準エージェントと会社のスキルが使えます。"
 echo " 最新の標準に追従するには、定期的に  git pull && sh team-setup/setup.sh"
 echo "==========================================================="
