@@ -47,6 +47,8 @@
 .appshell-launchpanel .lpcard{width:214px;background:var(--card);border:1px solid var(--line);border-radius:10px;
   box-shadow:0 12px 30px rgba(20,40,90,.17);padding:5px;}
 .lph{font-size:10.5px;font-weight:700;color:var(--gray);padding:7px 12px 6px;}
+/* 会社ごとの見出し（Esupport／Esecurity／新規法人）＝事業の行より少し大きい太字・うすい水色の行（RULEBOOK §4・台帳7-37） */
+.lpg{font-size:14px;font-weight:700;color:var(--text);background:var(--topbar);border-radius:6px;padding:6px 10px 5px;margin:5px 0 2px;}
 .lpi{display:flex;align-items:center;padding:9px 12px 9px 16px;border-radius:8px;text-decoration:none;color:var(--text);font-size:13px;cursor:pointer;position:relative;}
 .lpi::before{content:"";position:absolute;left:7px;top:50%;transform:translateY(-50%);width:3px;height:15px;border-radius:2px;background:var(--activebg);}
 .lpi:hover{background:var(--topbar);}
