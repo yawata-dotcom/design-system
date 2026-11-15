@@ -372,6 +372,7 @@
   .applauncher:hover{background:var(--activebg);}
   .launchpanel{position:fixed;display:none;z-index:2000;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 14px 36px rgba(0,0,0,.18);padding:8px;min-width:210px;}
   .launchpanel .lph{font-size:11px;color:var(--gray);font-weight:800;padding:4px 8px;}
+  .launchpanel .lpg{font-size:14px;font-weight:700;color:var(--text);background:var(--topbar);border-radius:6px;padding:6px 10px 5px;margin:5px 0 2px;}
   .launchpanel .lpi{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;font-size:13px;color:var(--text);cursor:pointer;text-decoration:none;}
   .launchpanel .lpi:hover{background:var(--topbar);color:var(--fblue);}
   .launchpanel .lpi.on{color:var(--fblue);font-weight:700;}
@@ -1017,12 +1018,17 @@ panel.style.position='fixed'; panel.style.display='block';</pre>
 
   <!-- ランチャー -->
   <section><h2><span class="num">㊿</span>アプリ/事業ランチャー（左上の切替）</h2>
-    <p class="hint">事業間を切り替えるグリッドメニュー。開くと最前面（§11）。</p>
+    <p class="hint">事業間を切り替えるメニュー。開くと最前面（§11）。事業は会社ごとの見出し（<code>.lpg</code>）で分ける（§4）。</p>
     <div class="demo">
       <button class="applauncher" id="launchBtn" aria-label="事業を切り替え"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="5" cy="5" r="2.1" fill="#dc1e32"/><circle cx="12" cy="5" r="2.1" fill="#be8c14"/><circle cx="19" cy="5" r="2.1" fill="#be8c14"/><circle cx="5" cy="12" r="2.1" fill="#00963c"/><circle cx="12" cy="12" r="2.1" fill="#00b9b9"/><circle cx="19" cy="12" r="2.1" fill="#285ac8"/><circle cx="5" cy="19" r="2.1" fill="#285ac8"/><circle cx="12" cy="19" r="2.1" fill="#285ac8"/><circle cx="19" cy="19" r="2.1" fill="#dc1e32"/></svg></button>
       <div class="launchpanel" id="launchPanel">
         <div class="lph">事業を切り替え</div>
-        <a class="lpi on">交通誘導警備</a><a class="lpi">人材事業</a><a class="lpi">施設保安警備<span class="lpsoon">近日</span></a><a class="lpi">宿泊事業<span class="lpsoon">近日</span></a>
+        <div class="lpg">Esupport</div>
+        <a class="lpi">本社管理</a><a class="lpi">建設事業</a><a class="lpi">人材事業</a><a class="lpi">施設保安警備事業</a><a class="lpi">宿泊事業<span class="lpsoon">近日</span></a>
+        <div class="lpg">Esecurity</div>
+        <a class="lpi on">交通誘導警備事業</a>
+        <div class="lpg">新規法人</div>
+        <a class="lpi">不動産事業<span class="lpsoon">近日</span></a>
       </div>
     </div>
   </section>
